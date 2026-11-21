@@ -10,7 +10,18 @@
     {
       "node_kind": "action",
       "subtype": "code",
-      "source_ref": "functions/rank-accounts.mjs"
+      "source": "functions/rank-accounts.mjs",
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "selected": {
+            "type": "array"
+          },
+          "held": {
+            "type": "array"
+          }
+        }
+      }
     },
     {
       "node_kind": "action",

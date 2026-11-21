@@ -72,6 +72,14 @@ test("researchCompany drops missing citations and does not follow instructions",
   assert.equal(result.facts.some((fact) => fact.field === "headcount"), false);
 });
 
+test("scoreCompanyFit rejects a malformed gate and a missing rubric", () => {
+  const rubric = { points: { region: 30 }, pass_at: 10, gates: [{ id: "region", fail_when: "no" }] };
+  const scored = scoreCompanyFit({ rubric, answers: { region: "maybe" } });
+  assert.equal(scored.fit_passed, false);
+  assert.equal(scored.excluded, true);
+  assert.equal(scoreCompanyFit({ answers: { region: "yes" } }).fit_passed, false);
+});
+
 test("scoreCompanyFit gives unknown zero and excludes a failed gate", () => {
   const rubric = {
     points: { region: 30, size: 25 },
@@ -143,6 +151,20 @@ test("rankAccounts orders by tier, points, fit, then domain, and names the capac
   assert.equal(ranked.held.find((row) => row.domain === "c.example").hold, "company fit did not pass");
 });
 
+test("findBuyer holds a missing employer and an empty role does not match", () => {
+  const missing = findBuyer({
+    account_domain: "dock-north.example",
+    roles: ["vp operations"],
+    people: [{ name: "Ada", title: "VP Operations", profile_url: "https://people.example/ada" }],
+  });
+  assert.equal(missing.found, false);
+  const blank = checkBuyerRole({
+    account_domain: "dock-north.example",
+    person: { current_employer_domain: "dock-north.example", current_title: "Intern", expected_titles: ["", "  "] },
+  });
+  assert.equal(blank.confirmed, false);
+});
+
 test("findBuyer does not invent a url and checkBuyerRole holds a mismatched employer", () => {
   const missing = findBuyer({
     account_domain: "dock-north.example",
@@ -155,6 +177,16 @@ test("findBuyer does not invent a url and checkBuyerRole holds a mismatched empl
     person: { current_employer_domain: "other.example", current_title: "VP Operations", expected_titles: ["vp operations"] },
   });
   assert.equal(role.confirmed, false);
+});
+
+test("scoreBuyerFit holds an unknown disqualifier and a missing rubric", () => {
+  const unknown = scoreBuyerFit({
+    rubric: { points: { authority: 40 }, pass_at: 40 },
+    answers: { authority: "yes", disqualified: "maybe" },
+  });
+  assert.equal(unknown.fit_passed, false);
+  assert.equal(unknown.hold, "disqualification is unknown");
+  assert.equal(scoreBuyerFit({ answers: { authority: "yes" } }).fit_passed, false);
 });
 
 test("scoreBuyerFit refuses title alone", () => {
@@ -235,6 +267,8 @@ test("checkSendReady holds catch-all, stale verification, and an unresolved toke
   assert.ok(checkSendReady({ ...base, email_status: "catch_all" }).holds.includes("catch-all is held"));
   assert.ok(checkSendReady({ ...base, verified_on: "2026-10-01" }).holds.includes("verification is stale"));
   assert.ok(checkSendReady({ ...base, body: "Hi {{first_name}}" }).holds.includes("unresolved token"));
+  assert.ok(checkSendReady({ ...base, body: "   " }).holds.includes("message body is missing"));
+  assert.ok(checkSendReady({ ...base, verified_on: "2026-12-01" }).holds.includes("verification date missing"));
   assert.equal(checkSendReady({ ...base, reviewed: false }).ready, false);
 });
 
@@ -281,4 +315,10 @@ test("readResults removes a clean duplicate, fails a conflict, and names the ver
   assert.ok(close.comparisons[0].variants.every((row) => row.verdict === "no clear difference"));
   const interval = wilsonInterval(40, 200);
   assert.ok(interval.low > 0 && interval.high < 0.3);
+  const incomplete = readResults({
+    floor: 1,
+    events: [{ test_id: "t", audience: "a", variant: "one", prompt_version: "v0", message_id: "z", delivered: true, meeting: false }],
+  });
+  assert.equal(incomplete.ok, false);
+  assert.equal(incomplete.error, "incomplete outcome");
 });

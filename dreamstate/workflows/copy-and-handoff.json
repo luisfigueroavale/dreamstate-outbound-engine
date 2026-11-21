@@ -10,7 +10,21 @@
     {
       "node_kind": "action",
       "subtype": "code",
-      "source_ref": "functions/check-send-ready.mjs"
+      "source": "functions/check-send-ready.mjs",
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "ready": {
+            "type": "boolean"
+          },
+          "holds": {
+            "type": "array"
+          },
+          "words": {
+            "type": "number"
+          }
+        }
+      }
     },
     {
       "node_kind": "action",

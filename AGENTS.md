@@ -2,7 +2,7 @@
 
 This folder is the outbound engine for one owner. Dreamstate is the system of record for companies, people, sequences, and the notes worth keeping. Files here are the method, the skills, and the blank templates. Codex is the preferred agent. Claude Code follows this same file.
 
-Read [docs/start-here.md](docs/start-here.md), then [brand/AGENTS.md](brand/AGENTS.md). A missing or blank file under `brand.local/` or `motion.local/` means stop and ask. Do not guess.
+Read [docs/start-here.md](docs/start-here.md), then [brand/AGENTS.md](brand/AGENTS.md). `set-up-engine` may create `brand.local/` and `motion.local/` from the blank templates. After that, a missing or blank file the current task needs means stop and ask. Do not guess.
 
 Company facts come from Company Context through `knowledge.context.resolve`. The motion files point at those pages. Approvals follow `docs/rules.md` in [dreamstate-gtm-team](https://github.com/luisfigueroavale/dreamstate-gtm-team). Engine rules for this repo are [docs/engine-rules.md](docs/engine-rules.md).
 

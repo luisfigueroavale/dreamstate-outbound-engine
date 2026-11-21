@@ -17,8 +17,11 @@ export function findBuyer({ account_domain, roles = [], people = [] } = {}) {
         skipped.push({ name: person.name ?? null, reason: "excluded profile" });
         continue;
       }
-      if (person.employer_domain && !sameDomain(person.employer_domain, account_domain)) {
-        skipped.push({ name: person.name ?? null, reason: "employer does not match" });
+      if (!person.employer_domain || !sameDomain(person.employer_domain, account_domain)) {
+        skipped.push({
+          name: person.name ?? null,
+          reason: person.employer_domain ? "employer does not match" : "employer missing",
+        });
         continue;
       }
       if (!person.profile_url) {
@@ -33,7 +36,7 @@ export function findBuyer({ account_domain, roles = [], people = [] } = {}) {
           title: person.title,
           profile_url: person.profile_url,
           role,
-          employer_domain: person.employer_domain ?? account_domain,
+          employer_domain: person.employer_domain,
         },
         skipped,
       };

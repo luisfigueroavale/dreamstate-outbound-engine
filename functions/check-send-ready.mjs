@@ -21,6 +21,7 @@ export function checkSendReady(row = {}) {
   if (!row.test_id || !row.variant) holds.push("test ids missing");
   if (hasToken(row.body)) holds.push("unresolved token");
   const words = wordCount(row.body);
-  if (words > wordLimit) holds.push("over the word limit");
+  if (words === 0) holds.push("message body is missing");
+  else if (words > wordLimit) holds.push("over the word limit");
   return { ready: holds.length === 0, holds, words };
 }

@@ -34,4 +34,5 @@ Follow `docs/skill-frame.md`.
 
 - Do not search tier C.
 - Do not use provider.enrich.person.waterfall to find buyers.
+- Run the local check-buyer-role hold before the fit column. A missing employer or title stays held.
 - A title without evidenced authority does not pass.

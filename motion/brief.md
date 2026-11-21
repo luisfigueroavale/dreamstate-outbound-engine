@@ -2,7 +2,7 @@
 
 Status: blank
 
-Copy this file to `motion.local/brief.md`. Leave this copy blank. Company facts stay in Company Context. This file points at those pages. It does not paste them.
+Copy this file to `motion.local/brief.md`. Leave this tracked file blank. Fill the local copy. Company facts stay in Company Context. This file points at those pages. It does not paste them.
 
 ## Outcome
 

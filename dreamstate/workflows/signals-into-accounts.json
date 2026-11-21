@@ -10,7 +10,18 @@
     {
       "node_kind": "action",
       "subtype": "code",
-      "source_ref": "functions/score-signals.mjs"
+      "source": "functions/score-signals.mjs",
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "points": {
+            "type": "number"
+          },
+          "tier": {
+            "type": "string"
+          }
+        }
+      }
     },
     {
       "node_kind": "action",

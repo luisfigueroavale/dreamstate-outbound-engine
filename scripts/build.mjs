@@ -67,7 +67,12 @@ const workflows = [
     name: "signals-into-accounts",
     summary: "Score signals with the local function, then write tiers. Disabled.",
     nodes: [
-      { node_kind: "action", subtype: "code", source_ref: "functions/score-signals.mjs" },
+      {
+        node_kind: "action",
+        subtype: "code",
+        source: "functions/score-signals.mjs",
+        output_schema: { type: "object", properties: { points: { type: "number" }, tier: { type: "string" } } },
+      },
       { node_kind: "action", subtype: "table_row_add" },
     ],
   },
@@ -75,7 +80,12 @@ const workflows = [
     name: "tier-buyers",
     summary: "Find buyers only for tier A and B. Disabled.",
     nodes: [
-      { node_kind: "action", subtype: "code", source_ref: "functions/rank-accounts.mjs" },
+      {
+        node_kind: "action",
+        subtype: "code",
+        source: "functions/rank-accounts.mjs",
+        output_schema: { type: "object", properties: { selected: { type: "array" }, held: { type: "array" } } },
+      },
       { node_kind: "action", subtype: "worksheet_column_run" },
     ],
   },
@@ -83,7 +93,15 @@ const workflows = [
     name: "copy-and-handoff",
     summary: "Draft the first touch and stop at an approval before any enrollment. Disabled.",
     nodes: [
-      { node_kind: "action", subtype: "code", source_ref: "functions/check-send-ready.mjs" },
+      {
+        node_kind: "action",
+        subtype: "code",
+        source: "functions/check-send-ready.mjs",
+        output_schema: {
+          type: "object",
+          properties: { ready: { type: "boolean" }, holds: { type: "array" }, words: { type: "number" } },
+        },
+      },
       { node_kind: "action", subtype: "request_approval" },
     ],
   },

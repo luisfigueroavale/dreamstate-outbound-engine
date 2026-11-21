@@ -21,7 +21,9 @@ export function ageDays(asOf, observed) {
   const left = stamp(asOf);
   const right = stamp(observed);
   if (Number.isNaN(left) || Number.isNaN(right)) return null;
-  return Math.floor((left - right) / 86400000);
+  const days = Math.floor((left - right) / 86400000);
+  if (days < 0) return null;
+  return days;
 }
 
 export function roundTo(value, places) {

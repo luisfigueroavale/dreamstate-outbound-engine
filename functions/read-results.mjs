@@ -36,16 +36,26 @@ function verdictFor(variant, others, floor) {
 }
 
 export function readResults({ events = [], floor = 100 } = {}) {
+  const seen = new Map();
   const groups = new Map();
   for (const event of events) {
+    if (typeof event.delivered !== "boolean" || typeof event.positive_reply !== "boolean" || typeof event.meeting !== "boolean") {
+      return { ok: false, error: "incomplete outcome", message_id: event.message_id, comparisons: [] };
+    }
+    const priorGlobal = seen.get(event.message_id);
+    const sameSlot = priorGlobal
+      && priorGlobal.variant === event.variant
+      && priorGlobal.test_id === event.test_id
+      && priorGlobal.audience === event.audience
+      && priorGlobal.prompt_version === event.prompt_version;
+    if (priorGlobal && (!sameFacts(priorGlobal, event) || !sameSlot)) {
+      return { ok: false, error: "conflicting duplicate", message_id: event.message_id, comparisons: [] };
+    }
+    if (!priorGlobal) seen.set(event.message_id, event);
     const groupKey = [event.test_id, event.audience, event.prompt_version].join("\t");
     if (!groups.has(groupKey)) groups.set(groupKey, new Map());
     const bucket = groups.get(groupKey);
-    const prior = bucket.get(event.message_id);
-    if (prior && !sameFacts(prior, event)) {
-      return { ok: false, error: "conflicting duplicate", message_id: event.message_id, comparisons: [] };
-    }
-    if (!prior) bucket.set(event.message_id, event);
+    if (!bucket.has(event.message_id)) bucket.set(event.message_id, event);
   }
   const comparisons = [];
   for (const [groupKey, messages] of groups) {
