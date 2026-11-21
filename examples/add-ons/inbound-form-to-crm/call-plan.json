@@ -2,5 +2,46 @@
   "kind": "call-plan",
   "status": "disabled",
   "title": "inbound-form-to-crm",
-  "summary": "A form lands on a worksheet through a webhook source you resolve at run time. Then `integrations.sync` can push one record. v1 leaves the graph disabled."
+  "calls": [
+    {
+      "order": 1,
+      "id": "tables.findable_catalog.list",
+      "mode": "live",
+      "needs_yes": false,
+      "params": {},
+      "note": "Free read. Confirm source.webhook_source is the id you attach."
+    },
+    {
+      "order": 2,
+      "id": "tables.table_sources.attach",
+      "mode": "dry_run",
+      "needs_yes": true,
+      "params": {
+        "definition_id": "source.webhook_source",
+        "table_id": "from tables.list"
+      },
+      "note": "The webhook source is free. It adds rows. Leave it disabled until a yes."
+    },
+    {
+      "order": 3,
+      "id": "integrations.crm_management_preview",
+      "mode": "live",
+      "needs_yes": false,
+      "params": {
+        "connection_id": "from the owner",
+        "configuration": "the field map"
+      },
+      "note": "Free read. Class each row before a sync."
+    },
+    {
+      "order": 4,
+      "id": "integrations.sync",
+      "mode": "dry_run",
+      "needs_yes": true,
+      "params": {
+        "record_id": "one record at a time"
+      },
+      "note": "One record after a yes. v1 does not sync."
+    }
+  ]
 }

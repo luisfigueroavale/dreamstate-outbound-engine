@@ -17,8 +17,11 @@ function args(argv) {
 
 function writePair(dir, result) {
   mkdirSync(dir, { recursive: true });
-  writeFileSync(path.join(dir, "report.md"), renderReport(result));
-  writeFileSync(path.join(dir, "results.json"), `${JSON.stringify(result, null, 2)}\n`);
+  const reportFile = path.join(dir, "report.md");
+  const resultsFile = path.join(dir, "results.json");
+  const jsonBody = `${JSON.stringify(result, null, 2)}\n`;
+  writeFileSync(reportFile, renderReport(result));
+  writeFileSync(resultsFile, jsonBody);
 }
 
 export function runDemo(argv = []) {

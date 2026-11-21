@@ -6,7 +6,7 @@
     "status": { "type": "string", "enum": ["blank", "filled"] },
     "test_id": { "type": "string" },
     "audience": { "type": "string" },
-    "changed_variable": { "type": "string" },
+    "changed_variable": { "type": "string", "minLength": 0 },
     "prompt_version": { "type": "string" },
     "variants": { "type": "array" }
   }

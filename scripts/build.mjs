@@ -6,12 +6,60 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dreamstate = path.join(root, "dreamstate");
 
 const columns = [
-  ["research-company", "Read tables.columns.catalog with family research and copy the research card."],
-  ["score-company-fit", "Read tables.columns.catalog with family classification and copy the fit score card."],
-  ["find-buyer", "Resolve the people column with tables.executable_definitions.list_resolved. Do not paste a definition id."],
-  ["score-buyer-fit", "Add an AI column with tables.columns.add after the catalog names the card."],
-  ["find-work-email", "Resolve the email column at run time, then verify with tables.contacts.verify_email."],
-  ["draft-first-touch", "Add an AI column only after a quoted dry run. The local function still checks the draft."],
+  {
+    step: "research-company",
+    definition_id: "column.research",
+    credits_per_row: 4,
+    run_cap: "Quote tables.columns.run with limit 1 before a larger live run.",
+    input_bindings: { query: { kind: "template", from: "prompts/research-company.md" } },
+  },
+  {
+    step: "score-company-fit",
+    definition_id: "column.ai_fit_score",
+    template_key: "icp_fit_score",
+    credits_per_row: 0.04,
+    run_cap: "Quote tables.columns.run with table_id, column_key, and limit 1.",
+    input_bindings: { prompt: { kind: "template", template_key: "icp_fit_score" } },
+    prompt_required: true,
+    model_id: "optional",
+  },
+  {
+    step: "find-buyer",
+    attach_with: "tables.table_sources.attach",
+    definition_id: "provider.linkedin.people.search",
+    credits_per_row: 0,
+    run_cap: "Source rows land through tables.table_sources.run, ceiling 50 credits a call.",
+    input_bindings: { account_id: { kind: "sender", required: true } },
+  },
+  {
+    step: "score-buyer-fit",
+    definition_id: "column.ai_fit_score",
+    template_key: "person_job_fit",
+    credits_per_row: 0.04,
+    run_cap: "Quote tables.columns.run with table_id, column_key, and limit 1.",
+    input_bindings: { prompt: { kind: "template", template_key: "person_job_fit" } },
+    prompt_required: true,
+  },
+  {
+    step: "find-work-email",
+    definition_id: "provider.enrich.email",
+    credits_per_row: 12.45,
+    billed: "only on a hit, and the price includes verify",
+    run_cap: "Quote tables.columns.run with limit 1. Ceiling 50 credits a call.",
+    input_bindings: {
+      full_name: { required: false },
+      company_domain: { required: false },
+      profile_url: { required: false },
+    },
+  },
+  {
+    step: "draft-first-touch",
+    column_kind: "ai prompt",
+    credits_per_row: 1,
+    run_cap: "An AI prompt column. Quote tables.columns.run before any live row.",
+    input_bindings: { prompt: { kind: "template", from: "prompts/draft-first-touch.md" } },
+    prompt_required: true,
+  },
 ];
 
 const workflows = [
@@ -52,14 +100,14 @@ export function buildDreamstate() {
   mkdirSync(path.join(dreamstate, "workflows"), { recursive: true });
   const prompts = readdirSync(path.join(root, "prompts")).filter((name) => name.endsWith(".md")).sort();
   const functions = readdirSync(path.join(root, "functions")).filter((name) => name.endsWith(".mjs") && name !== "support.mjs").sort();
-  for (const [step, policy] of columns) {
-    writeJson(path.join(dreamstate, "columns", `${step}.json`), {
-      kind: "column",
+  for (const column of columns) {
+    const source = column.step === "find-buyer";
+    writeJson(path.join(dreamstate, "columns", `${column.step}.json`), {
+      kind: source ? "source" : "column",
       status: "disabled",
-      step,
-      add_with: "tables.columns.add",
-      run_with: "tables.columns.run",
-      definition_policy: policy,
+      add_with: source ? "tables.table_sources.attach" : "tables.columns.add",
+      run_with: source ? "tables.table_sources.run" : "tables.columns.run",
+      ...column,
     });
   }
   for (const name of ["merge-sources", "score-signals", "rank-accounts", "assign-variant", "check-send-ready", "read-results"]) {

@@ -1,8 +1,16 @@
 {
   "kind": "column",
   "status": "disabled",
-  "step": "research-company",
   "add_with": "tables.columns.add",
   "run_with": "tables.columns.run",
-  "definition_policy": "Read tables.columns.catalog with family research and copy the research card."
+  "step": "research-company",
+  "definition_id": "column.research",
+  "credits_per_row": 4,
+  "run_cap": "Quote tables.columns.run with limit 1 before a larger live run.",
+  "input_bindings": {
+    "query": {
+      "kind": "template",
+      "from": "prompts/research-company.md"
+    }
+  }
 }

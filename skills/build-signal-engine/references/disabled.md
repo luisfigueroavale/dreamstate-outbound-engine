@@ -1,5 +1,9 @@
-# disabled
+# Disabled graphs
 
-Graphs stay disabled. The catalog has a code action, and v1 still runs functions on this machine. dry_run first, quote, wait for the owner's yes on that item
+workflow.automations.import_preflight needs kind and document and is a free read. workflow.automations.import needs kind, name, and document. It creates a disabled workflow and supports dry_run. workflow.automations.lint needs kind and is a free read. The catalog lists a code action. v1 still runs the functions on this machine.
 
-dry_run first, quote, wait for the owner's yes on that item
+Fetch tools_get. Preflight and lint are live reads. The import is a dry_run until a yes. Wait for a yes on that quoted item before any live call. Leave the result disabled.
+
+Show the owner the lint messages and the disabled flag. Do not show an enable button as the next step.
+
+Stop if lint fails. Do not enable the graph to test the failure. Do not add a schedule node.

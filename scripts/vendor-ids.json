@@ -1,7 +1,12 @@
 {
-  "note": "Definition ids that must be resolved at run time. Encoded so the repo does not paste them.",
+  "note": "Vendor lane and vendor card prefixes. Encoded so the repo does not paste them. Generic column ids stay in the tool map.",
   "encoded": [
-    "Y29sdW1uLmNvbXBhbnlfbGlua2VkaW5fam9icw==",
-    "Y29sdW1uLmNvbXBhbnlfZW1wbG95ZWVz"
+    "YmxpdHo=",
+    "ZmluZHltYWls",
+    "cHJvc3Blbw==",
+    "ZnVsbGVucmljaA==",
+    "aGFydmVzdGFwaQ==",
+    "YXBpZnlfbGlua2VkaW5fcG9zdA==",
+    "YXBpZnlfbGlua2VkaW5fZW5nYWdlcg=="
   ]
 }

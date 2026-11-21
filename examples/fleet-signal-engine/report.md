@@ -30,8 +30,8 @@ As of 2026-11-21. Capacity 2. Credits 0. Sent 0.
 
 ## Selected accounts
 
-- 2. lake-route-haul.example, tier B, signal points 24.2, fit score 100.
 - 1. red-cedar-freight.example, tier A, signal points 46, fit score 100.
+- 2. lake-route-haul.example, tier B, signal points 24.2, fit score 100.
 
 ## History sample
 

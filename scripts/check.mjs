@@ -17,7 +17,7 @@ const SECRET = [
 ];
 const MACHINE = ["/Use" + "rs/", "/ho" + "me/", "/priv" + "ate/", "/opt/" + "cursor/"];
 const DOTTED = /^[a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]+)+$/;
-const QUOTE = "dry_run first, quote, wait for the owner's yes on that item";
+const QUOTE = "dry_run first, show rows, credits and quote_hash, wait for the owner's yes on that item, then live with max_credits and an idempotency_key.";
 const MAX_BYTES = 5 * 1024 * 1024;
 const BINARY = /\.(png|jpe?g|gif|webp|woff2?|ttf|otf)$/i;
 const FUNCTIONS = [
@@ -84,6 +84,22 @@ function readTerms(file) {
 function termHit(text, term) {
   const escaped = term.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   return new RegExp(`(?<![a-z0-9])${escaped}(?![a-z0-9])`).test(text.toLowerCase());
+}
+
+function localDocTargets(markdown) {
+  const targets = [];
+  const pattern = /\[[^\]]*\]\(([^)\s]+)\)/g;
+  for (const match of String(markdown).matchAll(pattern)) {
+    const raw = match[1].split("#")[0].split("?")[0];
+    if (!raw) continue;
+    if (/^[a-z][a-z0-9+.-]*:/i.test(raw) || raw.startsWith("/")) continue;
+    targets.push(decodeURIComponent(raw));
+  }
+  return targets;
+}
+
+function referenceWordCount(markdown) {
+  return String(markdown).split(/\s+/).filter(Boolean).length;
 }
 
 export function dottedIds(text) {
@@ -200,6 +216,14 @@ export function runChecks(root, argv = []) {
         else if (!existsSync(path.join(skillRoot, name, "references", ref[1]))) bad(`${label} missing references/${ref[1]}`);
       }
     }
+    const referenceDir = path.join(skillRoot, name, "references");
+    if (existsSync(referenceDir)) {
+      for (const refName of readdirSync(referenceDir)) {
+        if (!refName.endsWith(".md")) continue;
+        const words = referenceWordCount(readFileSync(path.join(referenceDir, refName), "utf8"));
+        if (words < 40) bad(`skills/${name}/references/${refName} is nearly empty (${words} words)`);
+      }
+    }
   }
 
   for (const name of FUNCTIONS) {
@@ -244,11 +268,9 @@ export function runChecks(root, argv = []) {
 
   for (const file of textFiles.filter((item) => item.endsWith(".md"))) {
     const body = readFileSync(path.join(root, file), "utf8");
-    for (const match of body.matchAll(/\[[^\]]*\]\(([^)\s]+)\)/g)) {
-      let target = match[1].split("#")[0].split("?")[0];
-      if (!target || /^[a-z][a-z0-9+.-]*:/i.test(target) || target.startsWith("/")) continue;
-      target = decodeURIComponent(target);
-      if (!existsSync(path.resolve(root, path.dirname(file), target))) bad(`${file} links to missing ${match[1]}`);
+    for (const destination of localDocTargets(body)) {
+      const resolved = path.resolve(root, path.dirname(file), destination);
+      if (!existsSync(resolved)) bad(`${file} links to missing ${destination}`);
     }
   }
 

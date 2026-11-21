@@ -39,11 +39,11 @@ As of 2026-11-21. Capacity 5. Credits 0. Sent 0.
 
 ## Selected accounts
 
+- 1. river-dock.example, tier A, signal points 50.6, fit score 100.
 - 2. champion-return.example, tier A, signal points 46, fit score 100.
+- 3. south-pier.example, tier B, signal points 24.2, fit score 100.
 - 4. dock-north.example, tier B, signal points 24.2, fit score 80.
 - 5. north-lane.example, tier B, signal points 24, fit score 80.
-- 1. river-dock.example, tier A, signal points 50.6, fit score 100.
-- 3. south-pier.example, tier B, signal points 24.2, fit score 100.
 
 ## History sample
 

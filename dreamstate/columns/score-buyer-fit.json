@@ -1,8 +1,18 @@
 {
   "kind": "column",
   "status": "disabled",
-  "step": "score-buyer-fit",
   "add_with": "tables.columns.add",
   "run_with": "tables.columns.run",
-  "definition_policy": "Add an AI column with tables.columns.add after the catalog names the card."
+  "step": "score-buyer-fit",
+  "definition_id": "column.ai_fit_score",
+  "template_key": "person_job_fit",
+  "credits_per_row": 0.04,
+  "run_cap": "Quote tables.columns.run with table_id, column_key, and limit 1.",
+  "input_bindings": {
+    "prompt": {
+      "kind": "template",
+      "template_key": "person_job_fit"
+    }
+  },
+  "prompt_required": true
 }

@@ -1,8 +1,22 @@
 {
   "kind": "column",
   "status": "disabled",
-  "step": "find-work-email",
   "add_with": "tables.columns.add",
   "run_with": "tables.columns.run",
-  "definition_policy": "Resolve the email column at run time, then verify with tables.contacts.verify_email."
+  "step": "find-work-email",
+  "definition_id": "provider.enrich.email",
+  "credits_per_row": 12.45,
+  "billed": "only on a hit, and the price includes verify",
+  "run_cap": "Quote tables.columns.run with limit 1. Ceiling 50 credits a call.",
+  "input_bindings": {
+    "full_name": {
+      "required": false
+    },
+    "company_domain": {
+      "required": false
+    },
+    "profile_url": {
+      "required": false
+    }
+  }
 }

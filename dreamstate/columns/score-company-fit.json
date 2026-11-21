@@ -1,8 +1,19 @@
 {
   "kind": "column",
   "status": "disabled",
-  "step": "score-company-fit",
   "add_with": "tables.columns.add",
   "run_with": "tables.columns.run",
-  "definition_policy": "Read tables.columns.catalog with family classification and copy the fit score card."
+  "step": "score-company-fit",
+  "definition_id": "column.ai_fit_score",
+  "template_key": "icp_fit_score",
+  "credits_per_row": 0.04,
+  "run_cap": "Quote tables.columns.run with table_id, column_key, and limit 1.",
+  "input_bindings": {
+    "prompt": {
+      "kind": "template",
+      "template_key": "icp_fit_score"
+    }
+  },
+  "prompt_required": true,
+  "model_id": "optional"
 }

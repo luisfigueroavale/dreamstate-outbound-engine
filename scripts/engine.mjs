@@ -240,7 +240,11 @@ export function renderReport(result) {
     "",
     "## Selected accounts",
     "",
-    ...result.accounts.filter((account) => account.selected).map((account) => (
+    ...result.accounts
+      .filter((account) => account.selected)
+      .slice()
+      .sort((left, right) => left.rank - right.rank)
+      .map((account) => (
       `- ${account.rank}. ${account.domain}, tier ${account.tier}, signal points ${account.signal_points}, fit score ${account.fit_score}.`
     )),
     "",

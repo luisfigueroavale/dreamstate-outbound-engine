@@ -2,5 +2,41 @@
   "kind": "call-plan",
   "status": "disabled",
   "title": "post-engagers-to-worksheet",
-  "summary": "People who engaged with a post can land on the warm worksheet. Collection is `visibility.linkedin.engagement_harvest`. Reading them back is `visibility.linkedin.engagement_engagers`."
+  "calls": [
+    {
+      "order": 1,
+      "id": "visibility.linkedin.engagement_harvest",
+      "mode": "dry_run",
+      "needs_yes": true,
+      "params": {
+        "worksheet_id": "from the owner",
+        "linkedin_account_id": "a connected sender",
+        "post_id": "the post"
+      },
+      "note": "Free write. Still waits for a yes. Then read people with visibility.linkedin.engagement_engagers."
+    },
+    {
+      "order": 2,
+      "id": "tables.columns.add",
+      "mode": "dry_run",
+      "needs_yes": true,
+      "params": {
+        "definition_id": "column.linkedin_post_engagers",
+        "table_id": "the warm worksheet"
+      },
+      "note": "About 0.4 credits per engager returned. Post scans are separate, up to 300 items per profile row."
+    },
+    {
+      "order": 3,
+      "id": "tables.columns.run",
+      "mode": "dry_run",
+      "needs_yes": true,
+      "params": {
+        "table_id": "the warm worksheet",
+        "column_key": "the engager column",
+        "limit": 1
+      },
+      "note": "Quote one row first. Ceiling 50 credits a call. v1 does not go live."
+    }
+  ]
 }

@@ -17,7 +17,7 @@ It will not send, enroll, launch, spend credits, push to your CRM, change a sche
 ## The first 30 minutes
 
 1. Install the Dreamstate CLI if it is not installed: `npx @trydreamstate/cli install`. Sign in in the browser. Do not paste a key. The server URL is in [.mcp.json](.mcp.json).
-2. From this folder, run `npm run demo`. Open `output/demo/report.md`. The same text is committed at [examples/first-batch/report.md](examples/first-batch/report.md). Read why each company was picked or held.
+2. Start the offline sample from this folder with `npm run demo`. The write-up lands at `output/demo/report.md`, and the saved twin is [examples/first-batch/report.md](examples/first-batch/report.md). Look at the hold reason next to every company.
 3. Open the folder in Codex or Claude Code and run `set-up-engine`. It calls `whoami` and confirms the workspace.
 4. Copy `motion/` to `motion.local/` and fill [motion/brief.md](motion/brief.md) with the agent, from Company Context and your answers.
 5. Run `calibrate-fit` on ten companies you know. Write your expected decision for each before any paid call.
@@ -99,12 +99,23 @@ Function count: 14
 | [brand/](brand/AGENTS.md) | Blank templates. Your copy is `brand.local/` |
 | [scripts/check.mjs](scripts/check.mjs) | Repo check |
 
-## Pick your first job
+## Choose a starting task
 
-- Prepare a first batch: `set-up-engine`, then `write-motion-brief`, then `calibrate-fit`.
-- Build the signal engine: `build-signal-engine` on the fleet example. It stops while the graphs are disabled.
-- Wire it into Dreamstate: `npm run plan-install`, then the owner says yes per item.
-- Read results: `read-results` after mail has actually been delivered. Under 100 delivered per variant, the verdict is too little data.
+- Run a first batch. The Outbound Lead uses `set-up-engine`, then `write-motion-brief`, then `calibrate-fit`.
+
+  Paste this prompt: "You are the Outbound Lead. Follow set-up-engine, then write-motion-brief, then calibrate-fit. Keep the work offline until I approve one quoted row."
+
+- Map the signal path. The Outbound Lead uses `build-signal-engine` on the fleet folder and leaves every graph disabled.
+
+  Paste this prompt: "You are the Outbound Lead. Follow build-signal-engine in examples/fleet-signal-engine. Quote each step. Do not enable a workflow."
+
+- Connect the worksheet. The Outbound Lead reads `npm run plan-install`. The Lead Sourcer runs `build-account-list` only after the caps are approved.
+
+  Paste this prompt: "You are the Outbound Lead. Run npm run plan-install and stop. The Lead Sourcer may follow build-account-list only after I approve the caps."
+
+- Read what came back. Sequences and Deliverability follows `read-results` only after messages were delivered.
+
+  Paste this prompt: "You are Sequences and Deliverability. Follow read-results. If a variant has fewer than 100 delivered messages, say too little data and leave the rubric alone."
 
 ## Names you never want in the repo
 

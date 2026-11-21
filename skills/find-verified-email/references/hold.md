@@ -1,5 +1,9 @@
-# hold
+# Verify and hold
 
-A catch-all is never ready. A second verifier id was not confirmed. Do not invent one. LinkedIn remains the path when no verified email exists, and it still does not send.
+tables.contacts.verify_email is 0.45 credits an address, for 1 to 100 addresses, with a maximum of 45 credits a call. There is no dry_run quote. Quote 0.45 times the address count yourself. Live needs the owner's approval and max_credits from 3 to 300. addresses is required.
 
-dry_run first, quote, wait for the owner's yes on that item
+Fetch tools_get before the live call. A confirmed catch-all may go to a specialist verifier that costs more. This engine still holds catch-alls. Unknown is held. A valid address older than the verification window is held.
+
+Show the owner the status, the checked time, and the credit count you quoted from 0.45 times the addresses.
+
+Stop on catch-all, unknown, invalid, or stale. Do not mark the row ready. A profile with no verified email can stay as a LinkedIn path, and it still does not send.

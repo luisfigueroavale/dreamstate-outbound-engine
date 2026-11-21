@@ -89,7 +89,7 @@ These still wait. A price of 0 is not a yes.
 | `tables.worksheets.function_bind` | 0 | confirmed | dry_run first, quote, wait for the owner's yes on that item | function_id, revision, table_id, column_key, input_mappings, output_mappings, caller_credit_cap | `dreamstate tools run tables.worksheets.function_bind` |
 | `tables.rows.dedupe` | 0 | confirmed | dry_run first, quote, wait for the owner's yes on that item | table_id, column_id, key_kind. Dry run is the preview. Live would change rows. | `dreamstate tools run tables.rows.dedupe` |
 | `tables.table_sources.attach` | 0 | confirmed | dry_run first, quote, wait for the owner's yes on that item | table_id, source_column_id. One live source at a time. | `dreamstate tools run tables.table_sources.attach` |
-| `tables.table_sources.update` | 0 | confirmed | dry_run first, quote, wait for the owner's yes on that item | table_id, expected_state. Put the row cap and the credit cap here. | `dreamstate tools run tables.table_sources.update` |
+| `tables.table_sources.update` | 0 | confirmed | dry_run first, show rows, credits and quote_hash, wait for the owner's yes on that item, then live with max_credits and an idempotency_key. | table_id, expected_state, per_run_max_rows, and per_run_max_credits. | `dreamstate tools run tables.table_sources.update` |
 | `workflow.automations.import` | 0 | confirmed | dry_run first, quote, wait for the owner's yes on that item | kind, name, document. Creates a disabled workflow. | `dreamstate tools run workflow.automations.import` |
 | `workflow.automations.compose` | 0 | confirmed | dry_run first, quote, wait for the owner's yes on that item | kind, name, steps | `dreamstate tools run workflow.automations.compose` |
 | `workflow.automations.create` | 0 | confirmed | dry_run first, quote, wait for the owner's yes on that item | kind, name | `dreamstate tools run workflow.automations.create` |
@@ -101,71 +101,67 @@ These still wait. A price of 0 is not a yes.
 | `sequence.sequences.create_from_worksheet` | 0 | confirmed | dry_run first, quote, wait for the owner's yes on that item | worksheet_id, name, steps | `dreamstate tools run sequence.sequences.create_from_worksheet` |
 | `sequence.outreach.enrichment_sequence_update` | 0 | confirmed | dry_run first, quote, wait for the owner's yes on that item | field, steps | `dreamstate tools run sequence.outreach.enrichment_sequence_update` |
 | `visibility.linkedin.engagement_harvest` | 0 | confirmed | dry_run first, quote, wait for the owner's yes on that item | worksheet_id, linkedin_account_id, post_id. A free write. | `dreamstate tools run visibility.linkedin.engagement_harvest` |
-| `social.outreach.keyword_dm_rules.replace` | 0 | confirmed | dry_run first, quote, wait for the owner's yes on that item | artifact_id, expected_revision, platform, rules. Replaces the whole rule set. | `dreamstate tools run social.outreach.keyword_dm_rules.replace` |
+| `social.outreach.keyword_dm_rules.replace` | 0 | confirmed | Destructive. It drops any rule you do not send back. dry_run first, show rows, credits and quote_hash, wait for the owner's yes on that item, then live with max_credits and an idempotency_key. | artifact_id, expected_revision, platform, and rules. Read the list first. | `dreamstate tools run social.outreach.keyword_dm_rules.replace` |
 | `sequence.sequences.enroll_selection` | 0 | confirmed | dry_run first, quote, wait for the owner's yes on that item | sequence_id, worksheet_id. Enrollment. v1 does not call it live. | `dreamstate tools run sequence.sequences.enroll_selection` |
 | `workflow.workflows.enable` | 0 | confirmed | dry_run first, quote, wait for the owner's yes on that item | workflow_ids. External activate. Needs its own yes. | `dreamstate tools run workflow.workflows.enable` |
 | `workflow.workflows.status_set` | 0 | confirmed | dry_run first, quote, wait for the owner's yes on that item | workflow_id, status. External activate. Needs its own yes. | `dreamstate tools run workflow.workflows.status_set` |
 
 ## Paid ids
 
-A skill that names one of these in backticks includes the sentence "dry_run first, quote, wait for the owner's yes on that item".
+A skill that names one of these in backticks includes this sentence: "dry_run first, show rows, credits and quote_hash, wait for the owner's yes on that item, then live with max_credits and an idempotency_key."
 
 | Id | Cost | Status | Consent | Inputs | CLI |
 | --- | --- | --- | --- | --- | --- |
-| `tables.columns.run` | dynamic, quote per row | confirmed | dry_run first, quote, wait for the owner's yes on that item | table_id | `dreamstate tools run tables.columns.run` |
-| `tables.columns.run_all` | dynamic | confirmed | dry_run first, quote, wait for the owner's yes on that item | selection_snapshot_id, preview_id, preview_digest, pricing_digest, max_rows, max_duration_seconds, table_id | `dreamstate tools run tables.columns.run_all` |
-| `tables.company_search.run` | 0 credits, external write | confirmed | dry_run first, quote, wait for the owner's yes on that item | route_id | `dreamstate tools run tables.company_search.run` |
-| `tables.people_search.run` | 0 credits, external | confirmed | dry_run first, quote, wait for the owner's yes on that item | Optional people, company, from_table, limit. Building rows is tables.table_sources.run. | `dreamstate tools run tables.people_search.run` |
-| `tables.table_sources.run` | dynamic, ceiling 50 | confirmed | dry_run first, quote, wait for the owner's yes on that item | table_id. Live also needs max_rows. | `dreamstate tools run tables.table_sources.run` |
-| `crm.signals.search_run` | dynamic, ceiling 1000000 | confirmed | dry_run first, quote, wait for the owner's yes on that item | definition_id from tables.findable_catalog.list. Live needs approved and max_credits. Do not set bind_feed without a separate yes. | `dreamstate tools run crm.signals.search_run` |
+| `tables.columns.run` | dynamic, ceiling 50 credits a call | confirmed | dry_run first, show rows, credits and quote_hash, wait for the owner's yes on that item, then live with max_credits and an idempotency_key. | Quote with dry_run of table_id, column_key, and limit 1. | `dreamstate tools run tables.columns.run` |
+| `tables.columns.run_all` | dynamic, ceiling 50 credits a call | confirmed | dry_run first, show rows, credits and quote_hash, wait for the owner's yes on that item, then live with max_credits and an idempotency_key. | Quote with dry_run of table_id, column_key, and limit 1. | `dreamstate tools run tables.columns.run_all` |
+| `tables.company_search.run` | 0 credits. Live is refused with not_executable and builds no rows. | confirmed | dry_run only, to check the route. | route_id. Rows come from tables.table_sources.attach then tables.table_sources.run. | `dreamstate tools run tables.company_search.run` |
+| `tables.people_search.run` | 0 credits. Live is refused with not_executable and builds no rows. | confirmed | dry_run only, to check the route. | people, company, from_table, and limit from 1 to 1000. Rows come from tables.table_sources.attach then tables.table_sources.run. | `dreamstate tools run tables.people_search.run` |
+| `tables.table_sources.run` | dynamic, ceiling 50 credits a call | confirmed | dry_run first, show rows, credits and quote_hash, wait for the owner's yes on that item, then live with max_credits and an idempotency_key. | table_id. max_rows is optional, from 1 to 10000. | `dreamstate tools run tables.table_sources.run` |
+| `crm.signals.search_run` | dynamic, ceiling 1000000 | confirmed | dry_run first, show rows, credits and quote_hash, wait for the owner's yes on that item, then live with max_credits and an idempotency_key. | definition_id from tables.findable_catalog.list. Live needs approved true, table_id, and max_credits. bind_feed together with every and max_credits_per_cycle creates a schedule and needs its own yes. | `dreamstate tools run crm.signals.search_run` |
 | `crm.contact.find_person` | 0.9 credits | confirmed | dry_run first, quote, wait for the owner's yes on that item | An email or a public profile id. A Sales Navigator URL is refused. | `dreamstate tools run crm.contact.find_person` |
 | `crm.contact.find_company` | dynamic, ceiling 50 | confirmed | dry_run first, quote, wait for the owner's yes on that item | domain or company_name. list_fields is free. | `dreamstate tools run crm.contact.find_company` |
-| `crm.contact.find_email` | variable, maximum 50 a call | confirmed | dry_run first, quote, wait for the owner's yes on that item | domain plus a name, or a public profile URL. | `dreamstate tools run crm.contact.find_email` |
-| `tables.contacts.verify_email` | 0.45 credits an address, maximum 45 a call | confirmed | dry_run first, quote, wait for the owner's yes on that item | addresses, 1 to 100. Catch-all is not invalid. This engine holds it. | `dreamstate tools run tables.contacts.verify_email` |
+| `crm.contact.find_email` | variable, maximum 50 a call. dry_run is free and returns the provider chain and a quote_hash. | confirmed | dry_run first, show rows, credits and quote_hash, wait for the owner's yes on that item, then live with max_credits and an idempotency_key. | linkedin_url, full_name, first_name, last_name, and domain. | `dreamstate tools run crm.contact.find_email` |
+| `tables.contacts.verify_email` | 0.45 credits an address, 1 to 100 addresses, maximum 45 credits a call. There is no dry_run quote, so quote 0.45 times the address count. | confirmed | Live needs the owner's approval and max_credits from 3 to 300. | addresses. A confirmed catch-all may go to a specialist verifier that costs more. This engine still holds catch-alls. | `dreamstate tools run tables.contacts.verify_email` |
 | `workflow.workflows.call` | dynamic, and it can send | confirmed | dry_run first, quote, wait for the owner's yes on that item | workflow_id, input_json. v1 does not call it live. | `dreamstate tools run workflow.workflows.call` |
 | `sequence.sequences.activate_audience` | 0 credits, and it sends | confirmed | dry_run first, quote, wait for the owner's yes on that item | sequence_id. v1 does not activate. | `dreamstate tools run sequence.sequences.activate_audience` |
 | `integrations.sync` | 0 credits, external send | confirmed | dry_run first, quote, wait for the owner's yes on that item | record_id. v1 does not sync. | `dreamstate tools run integrations.sync` |
 
-## Column definition ids seen in search
+## Column and source definitions
 
-These are not tools_get capabilities. Read `tables.columns.catalog` or `tables.executable_definitions.list_resolved` again and copy the id from that response.
+Confirmed on 2026-11-21 with `tables.executable_definitions.list_resolved` and `tables.columns.catalog`. These are definition ids, not `tools_get` capability ids. Add a column with `tables.columns.add` and `binding_spec.definition_id`. Attach a source with `tables.table_sources.attach`. Run cost is quoted on `tables.columns.run` or `tables.table_sources.run`.
 
-| Id | Cost | Status | Consent | Inputs | CLI |
-| --- | --- | --- | --- | --- | --- |
-| `column.ai_fit_score` | Run cost is `tables.columns.run` | seen in tools_search on 2026-11-21 | dry_run first, quote, wait for the owner's yes on that item | binding_spec.definition_id on `tables.columns.add` | `dreamstate tools run tables.columns.add` |
-| `column.research` | Run cost is `tables.columns.run` | seen in tools_search on 2026-11-21 | dry_run first, quote, wait for the owner's yes on that item | Same as above. | `dreamstate tools run tables.columns.add` |
-| `column.formula` | 0 to add, run is quoted | seen in tools_search on 2026-11-21 | dry_run first, quote, wait for the owner's yes on that item | Same as above. | `dreamstate tools run tables.columns.add` |
-| `column.web_agent` | Run cost is `tables.columns.run` | seen in tools_search on 2026-11-21 | dry_run first, quote, wait for the owner's yes on that item | Same as above. | `dreamstate tools run tables.columns.add` |
-| `column.merge_columns` | 0 to add | seen in tools_search on 2026-11-21 | dry_run first, quote, wait for the owner's yes on that item | Same as above. | `dreamstate tools run tables.columns.add` |
-| `column.web_search` | Run cost is `tables.columns.run` | seen in tools_search on 2026-11-21 | dry_run first, quote, wait for the owner's yes on that item | Same as above. | `dreamstate tools run tables.columns.add` |
+Card keys that are not the id: `typesafe.fit_score` is the card key for `column.ai_fit_score`. `formula.merge` is the card key for `column.merge_columns`. `web.agent` is the card key for `column.web_agent`. `linkup.search` is the card key for `column.realtime_search`, which needs a vendor connection that is not ready here. Prefer `column.research` or `column.web_search`.
+
+| Id | What it is | Cost | Inputs |
+| --- | --- | --- | --- |
+| `provider.enrich.email` | Work email column | Up to 12.45 credits a row, billed only on a hit. Lanes run from 1.81 to 12.45. The price includes verify. | All optional: full_name, first_name, last_name, company_name, company_domain, profile_url, linkedin_urn, existing_email, steps, validator. |
+| `provider.enrich.person.waterfall` | Person enrich, including a phone lane | Variable, estimated at 132.45 credits a row, maximum 10000. | The email inputs plus existing_phone. Do not use this to find buyers. |
+| `provider.enrich.hiring` | Open jobs | Up to 1 credit a row, billed on a hit. | company_linkedin_url or company_domain. |
+| `provider.enrich.company_profile` | Company profile | Up to 1 credit a row, billed on a hit. | company_linkedin_url. |
+| `provider.linkedin.people.search` | People search source | 0 credits a row. | account_id is required (a LinkedIn sender). Optional: keywords, title, titles, title_excludes, location, industry, company, past_company, limit, per_company_limit, and others. |
+| `source.webhook_source` | Inbound webhook source | Free. It adds rows from the webhook. | items_path, upsert_field, require_secret, and body_format are optional. |
+| `column.linkedin_post_engagers` | People who engaged with a post | Billed on every attempt, about 0.4 credits per engager returned. Post scans are billed separately, up to 300 items per profile row. | Optional: post_url, profile_url, posts_count, kinds. |
+| `column.ai_fit_score` | Fit score. Templates icp_fit_score and person_job_fit. | 0.04 credits a row. | prompt is required. model_id is optional. |
+| `column.merge_columns` | Merge values | Free. | values is required. separator is optional. |
+| `column.web_agent` | Web research agent | Variable, about 2 credits a row. | prompt is required. instruction, model_id, and max_steps are optional. |
+| `column.realtime_search` | The card behind linkup.search | 2 credits a row. Needs a vendor connection. | query is required. Prefer `column.research` when no connection is set up. |
+| `column.research` | Web research without a vendor connection | Variable, about 4 credits a row. | query is required. |
+| `column.web_search` | Web search | 4 credits a row, billed on every attempt. | query is required. |
+| `column.formula` | Formula | Free. | expression is required. |
+| `column.company_linkedin_jobs` | Open jobs from a company page | Up to 1 credit a job, maximum 100 jobs a row. | company_linkedin_id is required. |
+| `column.company_employees` | People at a company | Variable, about 5.2 credits a row, maximum 600. | company_linkedin_url, company_domain, or company_id. |
+| `source.engaged_with_account` | People who engaged with chosen profiles | 1 credit a row. | profile_urls is required. |
+| `provider.enrich.linkedin.profile` | Profile enrichment | 0.9 credits a row. | profile_url is required. |
+
+A confirmed catch-all may go to a specialist verifier that costs more than `tables.contacts.verify_email`. This engine still holds catch-alls. A new operations leader is not a `crm.contact.find_person` lookup, because that call needs a person you already know. Use `provider.linkedin.people.search` and then `provider.enrich.linkedin.profile`.
 
 ## Code node
 
 A live read of `workflow.automations.node_catalog` lists a code action. Required config fields include source and output_schema. v1 keeps every graph disabled and runs the functions in `functions/` on this machine.
 
-## Unconfirmed
+The MCP tool runs_list is a free read of recent runs. Fetch it before you use it. It is not a catalog id. `workspace.usage.history_list` is the free ledger read beside it.
 
-tools_get returned not found for these names. Do not call them. Resolve a real id at run time.
-
-- `provider.enrich.email`
-- `provider.enrich.person.waterfall`
-- `provider.enrich.hiring`
-- `provider.enrich.company_profile`
-- `provider.linkedin.people.search`
-- `linkup.search`
-- `source.webhook_source`
-- `column.linkedin_post_engagers`
-- `typesafe.fit_score`
-- `formula.merge`
-- `web.agent`
-
-A second catch-all verifier id was not returned. Status: unconfirmed. Catch-all stays held.
-
-A free count of buyers by years in role was not found. Status: unconfirmed. Treat a new leader as a priced signal and quote it.
-
-A DNS read as a signal is unconfirmed. v1 does not build it. The catalog does list an HTTP request action. Do not call it from this repo.
-
-MCP tools called this build: whoami, tools_search, tools_get, skills_list. skills_get, packs_route, packs_get, and runs_list were not called. Status: unconfirmed as live calls. They are named on the server tool list.
+A DNS read is not part of v1.
 
 ## What this repo does not call live
 

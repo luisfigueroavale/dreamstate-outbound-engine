@@ -7,7 +7,9 @@ export function normaliseDomain(value) {
   raw = raw.replace(/:\d+$/, "");
   if (raw.startsWith("www.")) raw = raw.slice(4);
   raw = raw.replace(/\.$/, "");
-  if (!/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/.test(raw)) {
+  const label = "[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?";
+  const domainShape = new RegExp(`^${label}(?:\\.${label})+$`);
+  if (!domainShape.test(raw)) {
     return { ok: false, reason: "domain is not usable" };
   }
   return { ok: true, domain: raw };
