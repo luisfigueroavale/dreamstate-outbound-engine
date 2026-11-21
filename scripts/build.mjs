@@ -1,4 +1,4 @@
-import { mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -67,12 +67,10 @@ const workflows = [
     name: "signals-into-accounts",
     summary: "Score signals with the local function, then write tiers. Disabled.",
     nodes: [
-      {
-        node_kind: "action",
-        subtype: "code",
-        source: "functions/score-signals.mjs",
-        output_schema: { type: "object", properties: { points: { type: "number" }, tier: { type: "string" } } },
-      },
+      codeNode("functions/score-signals.mjs", ["points", "tier"], {
+        points: { type: "number" },
+        tier: { type: "string" },
+      }),
       { node_kind: "action", subtype: "table_row_add" },
     ],
   },
@@ -80,12 +78,10 @@ const workflows = [
     name: "tier-buyers",
     summary: "Find buyers only for tier A and B. Disabled.",
     nodes: [
-      {
-        node_kind: "action",
-        subtype: "code",
-        source: "functions/rank-accounts.mjs",
-        output_schema: { type: "object", properties: { selected: { type: "array" }, held: { type: "array" } } },
-      },
+      codeNode("functions/rank-accounts.mjs", ["picked", "held_rows"], {
+        picked: { type: "array" },
+        held_rows: { type: "array" },
+      }),
       { node_kind: "action", subtype: "worksheet_column_run" },
     ],
   },
@@ -93,19 +89,69 @@ const workflows = [
     name: "copy-and-handoff",
     summary: "Draft the first touch and stop at an approval before any enrollment. Disabled.",
     nodes: [
-      {
-        node_kind: "action",
-        subtype: "code",
-        source: "functions/check-send-ready.mjs",
-        output_schema: {
-          type: "object",
-          properties: { ready: { type: "boolean" }, holds: { type: "array" }, words: { type: "number" } },
-        },
-      },
+      codeNode("functions/check-send-ready.mjs", ["is_ready", "hold_list", "word_count"], {
+        is_ready: { type: "boolean" },
+        hold_list: { type: "array" },
+        word_count: { type: "integer" },
+      }),
       { node_kind: "action", subtype: "request_approval" },
     ],
   },
 ];
+
+function plainModule(relPath) {
+  return readFileSync(path.join(root, relPath), "utf8").replace(/^export /gm, "");
+}
+
+function inlineSource(relPath) {
+  const text = readFileSync(path.join(root, relPath), "utf8");
+  const body = text.replace(/^import .*\n+/gm, "").replace(/^export /gm, "");
+  if (!text.includes('from "./support.mjs"')) return body;
+  return `${plainModule("functions/support.mjs")}\n${body}`;
+}
+
+function codeNode(relPath, required, properties) {
+  return {
+    node_kind: "action",
+    subtype: "code",
+    source: inlineSource(relPath),
+    output_schema: {
+      required,
+      type: "object",
+      properties,
+      additionalProperties: false,
+    },
+  };
+}
+
+function portableDocument(workflow) {
+  const code = workflow.nodes.find((node) => node.subtype === "code");
+  return {
+    description: workflow.summary,
+    nodes: [
+      {
+        id: "trigger",
+        type: "trigger",
+        position: { x: 0, y: 0 },
+        data: { kind: "trigger", subtype: "record_created", config: {} },
+      },
+      {
+        id: "code",
+        type: "action",
+        position: { x: 0, y: 160 },
+        data: {
+          kind: "action",
+          subtype: "code",
+          config: {
+            source: code.source,
+            output_schema: code.output_schema,
+          },
+        },
+      },
+    ],
+    edges: [{ id: "trigger-to-code", source: "trigger", target: "code" }],
+  };
+}
 
 function writeJson(file, value) {
   writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
@@ -147,7 +193,8 @@ export function buildDreamstate() {
       preflight_with: "workflow.automations.import_preflight",
       lint_with: "workflow.automations.lint",
       nodes: workflow.nodes,
-      code_node: "The catalog lists subtype code. v1 keeps the graph disabled and runs the function on this machine.",
+      document: portableDocument(workflow),
+      code_node: "The catalog lists subtype code. The source field holds the function text. The graph stays off, and this machine still runs that function.",
     });
   }
   writeJson(path.join(dreamstate, "manifest.json"), {

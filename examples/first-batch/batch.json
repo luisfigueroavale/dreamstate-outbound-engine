@@ -122,6 +122,18 @@
       "signals": []
     },
     {
+      "source_id": "split-a",
+      "domain": "acme-split.example",
+      "name": "Acme Freight",
+      "signals": []
+    },
+    {
+      "source_id": "split-b",
+      "domain": "acme-split.example",
+      "name": "Acme Dental",
+      "signals": []
+    },
+    {
       "source_id": "list-2",
       "domain": "cold-storage-east.example",
       "name": "Cold Storage East",

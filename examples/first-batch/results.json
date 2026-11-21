@@ -6,8 +6,8 @@
   "credits": 0,
   "sent": 0,
   "funnel": {
-    "records": 14,
-    "rejected": 1,
+    "records": 16,
+    "rejected": 2,
     "accounts": 12,
     "tier_a": 3,
     "tier_b": 5,
@@ -24,6 +24,19 @@
       "source_id": "bad-1",
       "domain": "not a domain",
       "reason": "domain is not usable"
+    },
+    {
+      "source_id": "split-a,split-b",
+      "domain": "acme-split.example",
+      "source_ids": [
+        "split-a",
+        "split-b"
+      ],
+      "names": [
+        "Acme Freight",
+        "Acme Dental"
+      ],
+      "reason": "identity not proven"
     }
   ],
   "accounts": [

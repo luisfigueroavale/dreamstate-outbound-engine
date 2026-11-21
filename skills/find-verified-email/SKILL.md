@@ -15,7 +15,8 @@ Follow `docs/skill-frame.md`.
 
 1. Call `whoami`. Fetch `tools_get` before every `tools_run` (`references/waterfall.md`).
 2. For a batch, add `provider.enrich.email` with `tables.columns.add` and quote `tables.columns.run`. For one person, use `crm.contact.find_email`. dry_run first, show rows, credits and quote_hash, wait for the owner's yes on that item, then live with max_credits and an idempotency_key. (`references/verify.md`).
-3. Hold catch-all, unknown, and a stale check. A specialist verifier exists and this engine still holds catch-alls (`references/hold.md`).
+3. Call `tables.contacts.verify_email` at 0.45 credits an address, and only when the email column did not already verify. The quote is 0.45 times the address count. Go live only with the owner's approval and a max_credits between 3 and 300 (`references/hold.md`).
+4. Hold catch-all, unknown, and a stale check. A specialist verifier exists and this engine still holds catch-alls (`references/hold.md`).
 
 ## Dreamstate tools
 

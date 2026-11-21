@@ -1,4 +1,4 @@
-import { ageDays, roundTo } from "./support.mjs";
+import { ageDays, observedDateKind, roundTo } from "./support.mjs";
 
 export function scoreSignals({ signals = [], rules, as_of } = {}) {
   const catalog = new Map((rules?.families ?? []).map((family) => [family.id, family]));
@@ -13,7 +13,8 @@ export function scoreSignals({ signals = [], rules, as_of } = {}) {
     const age = ageDays(as_of, signal.observed_on);
     let points = 0;
     if (age == null) {
-      notes.push({ family: family.id, reason: "missing date" });
+      const kind = observedDateKind(as_of, signal.observed_on);
+      notes.push({ family: family.id, reason: kind === "after" ? "date after as_of" : "missing date" });
     } else if (age > rules.cutoff_days) {
       notes.push({ family: family.id, reason: "past cutoff", age_days: age });
     } else {

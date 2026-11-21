@@ -15,15 +15,26 @@ export function normaliseDomain(value) {
   return { ok: true, domain: raw };
 }
 
-export function ageDays(asOf, observed) {
+function stamps(asOf, observed) {
   if (!asOf || !observed) return null;
   const stamp = (value) => Date.parse(String(value).length === 10 ? `${value}T00:00:00Z` : value);
   const left = stamp(asOf);
   const right = stamp(observed);
   if (Number.isNaN(left) || Number.isNaN(right)) return null;
-  const days = Math.floor((left - right) / 86400000);
-  if (days < 0) return null;
-  return days;
+  return { left, right };
+}
+
+export function observedDateKind(asOf, observed) {
+  const pair = stamps(asOf, observed);
+  if (!pair) return "missing";
+  if (pair.right > pair.left) return "after";
+  return "ok";
+}
+
+export function ageDays(asOf, observed) {
+  const pair = stamps(asOf, observed);
+  if (!pair || pair.right > pair.left) return null;
+  return Math.floor((pair.left - pair.right) / 86400000);
 }
 
 export function roundTo(value, places) {

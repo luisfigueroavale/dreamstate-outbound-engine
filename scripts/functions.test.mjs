@@ -57,6 +57,18 @@ test("mergeSources keeps both signals and rejects a bad domain", () => {
   assert.equal(merged.rejected[0].reason, "domain is not usable");
 });
 
+test("mergeSources holds one domain when the names differ", () => {
+  const split = mergeSources({
+    records: [
+      { source_id: "a", domain: "acme-split.example", name: "Acme Freight", signals: [] },
+      { source_id: "b", domain: "acme-split.example", name: "Acme Dental", signals: [] },
+    ],
+  });
+  assert.equal(split.accounts.length, 0);
+  assert.equal(split.rejected[0].reason, "identity not proven");
+  assert.deepEqual(split.rejected[0].names, ["Acme Freight", "Acme Dental"]);
+});
+
 test("researchCompany drops missing citations and does not follow instructions", () => {
   const result = researchCompany({
     domain: "dock-north.example",
@@ -112,6 +124,13 @@ test("scoreSignals halves at one half life, zeros past cutoff, and caps stacking
   assert.equal(stale.points, 0);
   assert.equal(stale.tier, "C");
   assert.ok(stale.notes.some((note) => note.reason === "past cutoff"));
+  const future = scoreSignals({
+    as_of: "2026-11-21",
+    rules,
+    signals: [{ family: "hiring", observed_on: "2026-12-01" }],
+  });
+  assert.ok(future.notes.some((note) => note.reason === "date after as_of"));
+  assert.equal(future.points, 0);
   const stacked = scoreSignals({
     as_of: "2026-11-21",
     rules,
@@ -158,6 +177,7 @@ test("findBuyer holds a missing employer and an empty role does not match", () =
     people: [{ name: "Ada", title: "VP Operations", profile_url: "https://people.example/ada" }],
   });
   assert.equal(missing.found, false);
+  assert.equal(missing.hold, "current employer not confirmed");
   const blank = checkBuyerRole({
     account_domain: "dock-north.example",
     person: { current_employer_domain: "dock-north.example", current_title: "Intern", expected_titles: ["", "  "] },
@@ -216,6 +236,12 @@ test("findWorkEmail holds catch-all and unknown", () => {
   assert.equal(findWorkEmail({ verification_status: "catch_all", checked_on: "2026-11-21" }).hold, "catch-all is held");
   assert.equal(findWorkEmail({ verification_status: "unknown" }).hold, "unknown email is held");
   assert.equal(findWorkEmail({ verification_status: "valid", address: "a@b.example", checked_on: "2026-11-21" }).held, false);
+});
+
+test("findWorkEmail holds a valid status when the address is missing", () => {
+  assert.equal(findWorkEmail({ verification_status: "valid", address: null, checked_on: "2026-11-21" }).hold, "email is missing");
+  assert.equal(findWorkEmail({ verification_status: "valid", address: "  ", checked_on: "2026-11-21" }).hold, "email is missing");
+  assert.equal(findWorkEmail({ verification_status: "valid", address: "", checked_on: "2026-11-21" }).held, true);
 });
 
 test("assignVariant is stable for one domain and can differ for another", () => {
@@ -321,4 +347,16 @@ test("readResults removes a clean duplicate, fails a conflict, and names the ver
   });
   assert.equal(incomplete.ok, false);
   assert.equal(incomplete.error, "incomplete outcome");
+});
+
+test("readResults returns conflicting duplicate when one message id is under two variants", () => {
+  const twoVariants = readResults({
+    floor: 1,
+    events: [
+      { test_id: "t", audience: "a", variant: "one", prompt_version: "v0", message_id: "same", delivered: true, positive_reply: true, meeting: false },
+      { test_id: "t", audience: "a", variant: "two", prompt_version: "v0", message_id: "same", delivered: true, positive_reply: true, meeting: false },
+    ],
+  });
+  assert.equal(twoVariants.ok, false);
+  assert.equal(twoVariants.error, "conflicting duplicate");
 });

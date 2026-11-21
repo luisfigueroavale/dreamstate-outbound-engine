@@ -42,7 +42,8 @@ export function findBuyer({ account_domain, roles = [], people = [] } = {}) {
       };
     }
   }
-  const employerMiss = skipped.find((row) => row.reason === "employer does not match");
-  const hold = employerMiss ? "current employer not confirmed" : "no buyer in the role list";
+  const employerReasons = new Set(["employer missing", "employer does not match"]);
+  const onlyEmployer = skipped.length > 0 && skipped.every((row) => employerReasons.has(row.reason));
+  const hold = onlyEmployer ? "current employer not confirmed" : "no buyer in the role list";
   return { found: false, person: null, hold, skipped };
 }

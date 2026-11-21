@@ -7,9 +7,10 @@ const batch = JSON.parse(readFileSync(new URL("../examples/first-batch/batch.jso
 
 test("the first batch covers the offline cases and sends nothing", () => {
   const result = runBatch(batch);
-  assert.equal(result.funnel.records, 14);
-  assert.equal(result.funnel.rejected, 1);
+  assert.equal(result.funnel.records, 16);
+  assert.equal(result.funnel.rejected, 2);
   assert.equal(result.funnel.accounts, 12);
+  assert.equal(result.rejected.find((row) => row.domain === "acme-split.example").reason, "identity not proven");
   assert.equal(result.funnel.ready, 0);
   assert.equal(result.sent, 0);
   assert.equal(result.credits, 0);

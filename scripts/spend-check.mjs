@@ -2,14 +2,28 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+function numericCredits(row, flags) {
+  const credits = row?.credits;
+  if (typeof credits !== "number" || Number.isNaN(credits) || credits < 0) {
+    flags.push({ kind: "bad credits", capability_id: row?.capability_id ?? null, credits });
+    return null;
+  }
+  return credits;
+}
+
 export function checkSpend(report) {
   const flags = [];
   let spent = 0;
   const claimed = new Map();
-  for (const claim of report.claims ?? []) claimed.set(claim.capability_id, (claimed.get(claim.capability_id) ?? 0) + Number(claim.credits));
+  for (const claim of report.claims ?? []) {
+    const credits = numericCredits(claim, flags);
+    if (credits == null) continue;
+    claimed.set(claim.capability_id, (claimed.get(claim.capability_id) ?? 0) + credits);
+  }
   const used = new Map();
   for (const row of report.spend ?? []) {
-    const credits = Number(row.credits);
+    const credits = numericCredits(row, flags);
+    if (credits == null) continue;
     spent += credits;
     used.set(row.capability_id, (used.get(row.capability_id) ?? 0) + credits);
     const windows = report.approved_windows ?? [];

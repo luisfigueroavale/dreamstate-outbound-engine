@@ -8,8 +8,8 @@ As of 2026-11-21. Capacity 5. Credits 0. Sent 0.
 
 | Stage | Count |
 | --- | --- |
-| Records | 14 |
-| Rejected records | 1 |
+| Records | 16 |
+| Rejected records | 2 |
 | Accounts | 12 |
 | Tier A | 3 |
 | Tier B | 5 |
@@ -24,6 +24,7 @@ As of 2026-11-21. Capacity 5. Credits 0. Sent 0.
 ## Holds
 
 - Rejected record bad-1: domain is not usable.
+- Rejected record split-a,split-b: identity not proven.
 - city-hall-yards.example: company fit did not pass. Tier C, signal points 0, fit score 50.
 - cold-storage-east.example: company fit did not pass. Tier A, signal points 46, fit score 100.
 - lone-weak.example: tier C, no further spend. Tier C, signal points 12, fit score 80.

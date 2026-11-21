@@ -20,6 +20,6 @@ The ids in [tool-map.md](tool-map.md) marked confirmed returned a contract in wo
 
 No source run, no column run, no sequence, no enrollment, no CRM sync, and no workflow enable. v1 does not run a paid pilot.
 
-## Unconfirmed
+## Column and source definitions
 
-See the unconfirmed list in [tool-map.md](tool-map.md). Those names are not called.
+The ids, prices, and inputs are in [tool-map.md](tool-map.md) under Column and source definitions. That table is the list this repo uses.

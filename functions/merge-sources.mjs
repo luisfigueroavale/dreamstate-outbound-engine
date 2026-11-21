@@ -40,8 +40,20 @@ export function mergeSources({ records = [] } = {}) {
       });
     }
   }
-  const accounts = [...grouped.values()]
-    .map(({ seen, ...account }) => account)
-    .sort((a, b) => (a.domain < b.domain ? -1 : a.domain > b.domain ? 1 : 0));
+  const accounts = [];
+  for (const { seen, ...account } of grouped.values()) {
+    if (account.names.length > 1) {
+      rejected.push({
+        source_id: account.source_ids.join(","),
+        domain: account.domain,
+        source_ids: account.source_ids,
+        names: account.names,
+        reason: "identity not proven",
+      });
+      continue;
+    }
+    accounts.push(account);
+  }
+  accounts.sort((left, right) => left.domain.localeCompare(right.domain));
   return { accounts, rejected };
 }

@@ -7,12 +7,16 @@ const HOLDS = {
 
 export function findWorkEmail({ address = null, waterfall_status = null, verification_status = null, checked_on = null } = {}) {
   const status = verification_status || waterfall_status || "missing";
-  const held = status !== "valid";
+  const blankAddress = address == null || String(address).trim() === "";
+  const held = status !== "valid" || blankAddress;
+  let hold = null;
+  if (status === "valid" && blankAddress) hold = "email is missing";
+  else if (status !== "valid") hold = HOLDS[status] ?? "email is not valid";
   return {
     address,
     status,
     checked_on,
     held,
-    hold: held ? HOLDS[status] ?? "email is not valid" : null,
+    hold,
   };
 }

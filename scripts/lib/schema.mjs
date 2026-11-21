@@ -21,9 +21,8 @@ function objectIssues(data, schema, path) {
     if (data[key] !== undefined) issues.push(...validate(data[key], properties[key], `${path}.${key}`));
   }
   if (schema.additionalProperties === false) {
-    for (const key of Object.keys(data)) {
-      if (!Object.prototype.hasOwnProperty.call(properties, key)) issues.push(`${path}.${key} is not allowed`);
-    }
+    const extra = Object.keys(data).filter((k) => !(k in properties));
+    for (const k of extra) issues.push(`${path}.${k} is not allowed`);
   }
   return issues;
 }

@@ -10,17 +10,22 @@
     {
       "node_kind": "action",
       "subtype": "code",
-      "source": "functions/rank-accounts.mjs",
+      "source": "const TIER_ORDER = { A: 0, B: 1, C: 2 };\n\nfunction compareAccounts(a, b) {\n  const byTier = (TIER_ORDER[a.tier] ?? 9) - (TIER_ORDER[b.tier] ?? 9);\n  if (byTier) return byTier;\n  if (a.signal_points !== b.signal_points) return b.signal_points - a.signal_points;\n  if (a.fit_score !== b.fit_score) return b.fit_score - a.fit_score;\n  if (a.domain < b.domain) return -1;\n  if (a.domain > b.domain) return 1;\n  return 0;\n}\n\nfunction rankAccounts({ accounts = [], capacity = 0 } = {}) {\n  const held = [];\n  const eligible = [];\n  for (const account of accounts) {\n    if (!account.fit_passed) {\n      held.push({ ...account, selected: false, hold: \"company fit did not pass\" });\n      continue;\n    }\n    if (account.suppressed) {\n      held.push({ ...account, selected: false, hold: \"suppressed\" });\n      continue;\n    }\n    if (account.tier === \"C\") {\n      held.push({ ...account, selected: false, hold: \"tier C, no further spend\" });\n      continue;\n    }\n    eligible.push(account);\n  }\n  eligible.sort(compareAccounts);\n  const selected = [];\n  eligible.forEach((account, index) => {\n    if (index < capacity) selected.push({ ...account, selected: true, hold: null, rank: index + 1 });\n    else held.push({ ...account, selected: false, hold: \"capacity\" });\n  });\n  return { selected, held };\n}\n",
       "output_schema": {
+        "required": [
+          "picked",
+          "held_rows"
+        ],
         "type": "object",
         "properties": {
-          "selected": {
+          "picked": {
             "type": "array"
           },
-          "held": {
+          "held_rows": {
             "type": "array"
           }
-        }
+        },
+        "additionalProperties": false
       }
     },
     {
@@ -28,5 +33,61 @@
       "subtype": "worksheet_column_run"
     }
   ],
-  "code_node": "The catalog lists subtype code. v1 keeps the graph disabled and runs the function on this machine."
+  "document": {
+    "description": "Find buyers only for tier A and B. Disabled.",
+    "nodes": [
+      {
+        "id": "trigger",
+        "type": "trigger",
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "data": {
+          "kind": "trigger",
+          "subtype": "record_created",
+          "config": {}
+        }
+      },
+      {
+        "id": "code",
+        "type": "action",
+        "position": {
+          "x": 0,
+          "y": 160
+        },
+        "data": {
+          "kind": "action",
+          "subtype": "code",
+          "config": {
+            "source": "const TIER_ORDER = { A: 0, B: 1, C: 2 };\n\nfunction compareAccounts(a, b) {\n  const byTier = (TIER_ORDER[a.tier] ?? 9) - (TIER_ORDER[b.tier] ?? 9);\n  if (byTier) return byTier;\n  if (a.signal_points !== b.signal_points) return b.signal_points - a.signal_points;\n  if (a.fit_score !== b.fit_score) return b.fit_score - a.fit_score;\n  if (a.domain < b.domain) return -1;\n  if (a.domain > b.domain) return 1;\n  return 0;\n}\n\nfunction rankAccounts({ accounts = [], capacity = 0 } = {}) {\n  const held = [];\n  const eligible = [];\n  for (const account of accounts) {\n    if (!account.fit_passed) {\n      held.push({ ...account, selected: false, hold: \"company fit did not pass\" });\n      continue;\n    }\n    if (account.suppressed) {\n      held.push({ ...account, selected: false, hold: \"suppressed\" });\n      continue;\n    }\n    if (account.tier === \"C\") {\n      held.push({ ...account, selected: false, hold: \"tier C, no further spend\" });\n      continue;\n    }\n    eligible.push(account);\n  }\n  eligible.sort(compareAccounts);\n  const selected = [];\n  eligible.forEach((account, index) => {\n    if (index < capacity) selected.push({ ...account, selected: true, hold: null, rank: index + 1 });\n    else held.push({ ...account, selected: false, hold: \"capacity\" });\n  });\n  return { selected, held };\n}\n",
+            "output_schema": {
+              "required": [
+                "picked",
+                "held_rows"
+              ],
+              "type": "object",
+              "properties": {
+                "picked": {
+                  "type": "array"
+                },
+                "held_rows": {
+                  "type": "array"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "trigger-to-code",
+        "source": "trigger",
+        "target": "code"
+      }
+    ]
+  },
+  "code_node": "The catalog lists subtype code. The source field holds the function text. The graph stays off, and this machine still runs that function."
 }
