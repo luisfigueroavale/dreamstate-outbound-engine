@@ -1,0 +1,5 @@
+{
+  "name": "find-buyer",
+  "kind": "data",
+  "summary": "Walk the role list. Do not invent a profile URL."
+}

@@ -1,0 +1,21 @@
+{
+  "kind": "workflow",
+  "status": "disabled",
+  "name": "copy-and-handoff",
+  "summary": "Draft the first touch and stop at an approval before any enrollment. Disabled.",
+  "import_with": "workflow.automations.import",
+  "preflight_with": "workflow.automations.import_preflight",
+  "lint_with": "workflow.automations.lint",
+  "nodes": [
+    {
+      "node_kind": "action",
+      "subtype": "code",
+      "source_ref": "functions/check-send-ready.mjs"
+    },
+    {
+      "node_kind": "action",
+      "subtype": "request_approval"
+    }
+  ],
+  "code_node": "The catalog lists subtype code. v1 keeps the graph disabled and runs the function on this machine."
+}

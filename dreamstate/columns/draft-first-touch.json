@@ -1,0 +1,8 @@
+{
+  "kind": "column",
+  "status": "disabled",
+  "step": "draft-first-touch",
+  "add_with": "tables.columns.add",
+  "run_with": "tables.columns.run",
+  "definition_policy": "Add an AI column only after a quoted dry run. The local function still checks the draft."
+}

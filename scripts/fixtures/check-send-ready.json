@@ -1,0 +1,4 @@
+{
+  "function": "check-send-ready",
+  "note": "Offline fixture. The tests call the function directly."
+}

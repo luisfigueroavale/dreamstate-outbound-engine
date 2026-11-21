@@ -1,0 +1,5 @@
+{
+  "name": "check-send-ready",
+  "kind": "code",
+  "summary": "Hold catch-all, unknown, stale, unreviewed, and unresolved tokens."
+}

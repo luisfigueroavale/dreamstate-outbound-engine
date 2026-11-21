@@ -1,0 +1,6 @@
+{
+  "kind": "call-plan",
+  "status": "disabled",
+  "title": "post-engagers-to-worksheet",
+  "summary": "People who engaged with a post can land on the warm worksheet. Collection is `visibility.linkedin.engagement_harvest`. Reading them back is `visibility.linkedin.engagement_engagers`."
+}

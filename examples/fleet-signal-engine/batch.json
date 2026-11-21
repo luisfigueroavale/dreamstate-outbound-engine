@@ -1,0 +1,238 @@
+{
+  "fictional": true,
+  "seller": "Lanternway",
+  "note": "Fictional example. No real companies or people.",
+  "as_of": "2026-11-21",
+  "capacity": 2,
+  "capacity_left": 2,
+  "verification_window_days": 14,
+  "word_limit": 90,
+  "sequence_id": "draft-lanternway-1",
+  "offer_line": "Lanternway is a fictional shop board for regional fleets.",
+  "roles": [
+    "vp operations",
+    "fleet maintenance manager"
+  ],
+  "company_rubric": {
+    "points": {
+      "region": 30,
+      "size": 25,
+      "shop": 25,
+      "problem": 20
+    },
+    "pass_at": 55,
+    "gates": [
+      {
+        "id": "region",
+        "fail_when": "no"
+      },
+      {
+        "id": "excluded_type",
+        "fail_when": "yes"
+      }
+    ]
+  },
+  "buyer_rubric": {
+    "points": {
+      "title_match": 20,
+      "remit": 40,
+      "authority": 40
+    },
+    "pass_at": 60
+  },
+  "signals": {
+    "half_life_days": 21,
+    "cutoff_days": 90,
+    "stack_per_extra": 1.1,
+    "stack_cap": 1.3,
+    "tier_a": 40,
+    "tier_b": 18,
+    "buyers_per_tier": {
+      "A": 2,
+      "B": 3,
+      "C": 0
+    },
+    "families": [
+      {
+        "id": "hiring",
+        "points": 12,
+        "strong": false
+      },
+      {
+        "id": "route_news",
+        "points": 10,
+        "strong": false
+      },
+      {
+        "id": "system_move",
+        "points": 24,
+        "strong": true
+      },
+      {
+        "id": "new_leader",
+        "points": 22,
+        "strong": true
+      },
+      {
+        "id": "past_champion",
+        "points": 46,
+        "strong": true
+      }
+    ]
+  },
+  "test": {
+    "test_id": "lanternway-shop-line",
+    "audience": "regional-fleets",
+    "prompt_version": "v0",
+    "changed_variable": "the first sentence",
+    "variants": [
+      "The shop board shows the truck before it is due.",
+      "One lane for every service this week."
+    ]
+  },
+  "records": [
+    {
+      "source_id": "f1",
+      "domain": "red-cedar-freight.example",
+      "name": "Red Cedar Freight",
+      "signals": [
+        {
+          "family": "past_champion",
+          "observed_on": "2026-11-21",
+          "detail": "a past buyer"
+        }
+      ]
+    },
+    {
+      "source_id": "f2",
+      "domain": "lake-route-haul.example",
+      "name": "Lake Route Haul",
+      "signals": [
+        {
+          "family": "hiring",
+          "observed_on": "2026-11-21",
+          "detail": "a maintenance manager"
+        },
+        {
+          "family": "route_news",
+          "observed_on": "2026-11-21",
+          "detail": "a new depot"
+        }
+      ]
+    },
+    {
+      "source_id": "f3",
+      "domain": "prairie-broker.example",
+      "name": "Prairie Broker",
+      "signals": [
+        {
+          "family": "past_champion",
+          "observed_on": "2026-11-21",
+          "detail": "a strong signal on a bad fit"
+        }
+      ]
+    },
+    {
+      "source_id": "f4",
+      "domain": "quiet-depot.example",
+      "name": "Quiet Depot",
+      "signals": [
+        {
+          "family": "hiring",
+          "observed_on": "2026-08-01",
+          "detail": "an old posting"
+        }
+      ]
+    }
+  ],
+  "companies": {
+    "red-cedar-freight.example": {
+      "answers": {
+        "region": "yes",
+        "size": "yes",
+        "shop": "yes",
+        "problem": "yes",
+        "excluded_type": "no"
+      },
+      "suppression": "clear",
+      "people": [
+        {
+          "name": "Eden Moss",
+          "title": "VP Operations",
+          "profile_url": "https://people.example/eden-moss",
+          "employer_domain": "red-cedar-freight.example"
+        }
+      ],
+      "buyer_answers": {
+        "title_match": "yes",
+        "remit": "yes",
+        "authority": "yes",
+        "disqualified": "no"
+      },
+      "observation": "A former fleet lead now runs this shop.",
+      "email": {
+        "address": "eden@red-cedar-freight.example",
+        "verification_status": "valid",
+        "checked_on": "2026-11-18"
+      }
+    },
+    "lake-route-haul.example": {
+      "answers": {
+        "region": "yes",
+        "size": "yes",
+        "shop": "yes",
+        "problem": "yes",
+        "excluded_type": "no"
+      },
+      "suppression": "clear",
+      "people": [
+        {
+          "name": "Jules Hart",
+          "title": "Fleet Maintenance Manager",
+          "profile_url": "https://people.example/jules-hart",
+          "employer_domain": "lake-route-haul.example"
+        }
+      ],
+      "buyer_answers": {
+        "title_match": "yes",
+        "remit": "yes",
+        "authority": "yes",
+        "disqualified": "no"
+      },
+      "observation": "Lake Route Haul is hiring a maintenance manager and opening a depot.",
+      "email": {
+        "address": "jules@lake-route-haul.example",
+        "verification_status": "valid",
+        "checked_on": "2026-11-18"
+      }
+    },
+    "prairie-broker.example": {
+      "answers": {
+        "region": "yes",
+        "size": "no",
+        "shop": "no",
+        "problem": "no",
+        "excluded_type": "yes"
+      },
+      "suppression": "clear",
+      "people": [],
+      "buyer_answers": {}
+    },
+    "quiet-depot.example": {
+      "answers": {
+        "region": "yes",
+        "size": "yes",
+        "shop": "yes",
+        "problem": "yes",
+        "excluded_type": "no"
+      },
+      "suppression": "clear",
+      "people": [],
+      "buyer_answers": {}
+    }
+  },
+  "history": {
+    "floor": 100,
+    "events": []
+  }
+}

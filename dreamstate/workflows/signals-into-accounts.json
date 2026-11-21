@@ -1,0 +1,21 @@
+{
+  "kind": "workflow",
+  "status": "disabled",
+  "name": "signals-into-accounts",
+  "summary": "Score signals with the local function, then write tiers. Disabled.",
+  "import_with": "workflow.automations.import",
+  "preflight_with": "workflow.automations.import_preflight",
+  "lint_with": "workflow.automations.lint",
+  "nodes": [
+    {
+      "node_kind": "action",
+      "subtype": "code",
+      "source_ref": "functions/score-signals.mjs"
+    },
+    {
+      "node_kind": "action",
+      "subtype": "table_row_add"
+    }
+  ],
+  "code_node": "The catalog lists subtype code. v1 keeps the graph disabled and runs the function on this machine."
+}

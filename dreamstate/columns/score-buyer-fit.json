@@ -1,0 +1,8 @@
+{
+  "kind": "column",
+  "status": "disabled",
+  "step": "score-buyer-fit",
+  "add_with": "tables.columns.add",
+  "run_with": "tables.columns.run",
+  "definition_policy": "Add an AI column with tables.columns.add after the catalog names the card."
+}

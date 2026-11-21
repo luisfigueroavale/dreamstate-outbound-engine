@@ -1,0 +1,6 @@
+{
+  "kind": "call-plan",
+  "status": "disabled",
+  "title": "inbound-form-to-crm",
+  "summary": "A form lands on a worksheet through a webhook source you resolve at run time. Then `integrations.sync` can push one record. v1 leaves the graph disabled."
+}

@@ -1,0 +1,8 @@
+{
+  "kind": "column",
+  "status": "disabled",
+  "step": "find-work-email",
+  "add_with": "tables.columns.add",
+  "run_with": "tables.columns.run",
+  "definition_policy": "Resolve the email column at run time, then verify with tables.contacts.verify_email."
+}

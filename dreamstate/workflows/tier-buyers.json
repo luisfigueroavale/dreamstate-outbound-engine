@@ -1,0 +1,21 @@
+{
+  "kind": "workflow",
+  "status": "disabled",
+  "name": "tier-buyers",
+  "summary": "Find buyers only for tier A and B. Disabled.",
+  "import_with": "workflow.automations.import",
+  "preflight_with": "workflow.automations.import_preflight",
+  "lint_with": "workflow.automations.lint",
+  "nodes": [
+    {
+      "node_kind": "action",
+      "subtype": "code",
+      "source_ref": "functions/rank-accounts.mjs"
+    },
+    {
+      "node_kind": "action",
+      "subtype": "worksheet_column_run"
+    }
+  ],
+  "code_node": "The catalog lists subtype code. v1 keeps the graph disabled and runs the function on this machine."
+}

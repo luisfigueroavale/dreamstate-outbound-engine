@@ -1,0 +1,8 @@
+{
+  "kind": "column",
+  "status": "disabled",
+  "step": "research-company",
+  "add_with": "tables.columns.add",
+  "run_with": "tables.columns.run",
+  "definition_policy": "Read tables.columns.catalog with family research and copy the research card."
+}

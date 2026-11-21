@@ -1,0 +1,8 @@
+{
+  "kind": "column",
+  "status": "disabled",
+  "step": "score-company-fit",
+  "add_with": "tables.columns.add",
+  "run_with": "tables.columns.run",
+  "definition_policy": "Read tables.columns.catalog with family classification and copy the fit score card."
+}

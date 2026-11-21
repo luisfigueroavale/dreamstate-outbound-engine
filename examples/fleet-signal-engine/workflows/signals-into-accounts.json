@@ -1,0 +1,7 @@
+{
+  "kind": "workflow",
+  "status": "disabled",
+  "title": "signals-into-accounts",
+  "fictional": true,
+  "summary": "Disabled graph. Code node points at functions/score-signals.mjs. No schedule."
+}

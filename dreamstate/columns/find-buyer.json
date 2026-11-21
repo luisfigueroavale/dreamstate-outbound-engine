@@ -1,0 +1,8 @@
+{
+  "kind": "column",
+  "status": "disabled",
+  "step": "find-buyer",
+  "add_with": "tables.columns.add",
+  "run_with": "tables.columns.run",
+  "definition_policy": "Resolve the people column with tables.executable_definitions.list_resolved. Do not paste a definition id."
+}

@@ -1,0 +1,7 @@
+{
+  "kind": "callable",
+  "status": "disabled",
+  "step": "check-send-ready",
+  "publish_with": "tables.callables.publish",
+  "local_function": "functions/check-send-ready.mjs"
+}

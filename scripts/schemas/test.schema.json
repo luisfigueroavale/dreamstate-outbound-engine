@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "required": ["status", "test_id", "audience", "changed_variable", "variants", "prompt_version"],
+  "additionalProperties": false,
+  "properties": {
+    "status": { "type": "string", "enum": ["blank", "filled"] },
+    "test_id": { "type": "string" },
+    "audience": { "type": "string" },
+    "changed_variable": { "type": "string" },
+    "prompt_version": { "type": "string" },
+    "variants": { "type": "array" }
+  }
+}
