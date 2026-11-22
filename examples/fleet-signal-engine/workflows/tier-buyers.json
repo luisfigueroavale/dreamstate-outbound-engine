@@ -1,0 +1,7 @@
+{
+  "kind": "workflow",
+  "status": "disabled",
+  "title": "tier-buyers",
+  "fictional": true,
+  "summary": "Disabled graph. People search only when tier is A or B."
+}

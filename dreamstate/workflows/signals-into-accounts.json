@@ -1,0 +1,93 @@
+{
+  "kind": "workflow",
+  "status": "disabled",
+  "name": "signals-into-accounts",
+  "summary": "Score signals with the local function, then write tiers. Disabled.",
+  "import_with": "workflow.automations.import",
+  "preflight_with": "workflow.automations.import_preflight",
+  "lint_with": "workflow.automations.lint",
+  "nodes": [
+    {
+      "node_kind": "action",
+      "subtype": "code",
+      "source": "function normaliseDomain(value) {\n  if (value == null) return { ok: false, reason: \"missing domain\" };\n  let raw = String(value).trim().toLowerCase();\n  if (!raw) return { ok: false, reason: \"missing domain\" };\n  raw = raw.replace(/^[a-z][a-z0-9+.-]*:\\/\\//, \"\");\n  raw = raw.split(/[/?#]/)[0];\n  raw = raw.replace(/:\\d+$/, \"\");\n  if (raw.startsWith(\"www.\")) raw = raw.slice(4);\n  raw = raw.replace(/\\.$/, \"\");\n  const label = \"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\";\n  const domainShape = new RegExp(`^${label}(?:\\\\.${label})+$`);\n  if (!domainShape.test(raw)) {\n    return { ok: false, reason: \"domain is not usable\" };\n  }\n  return { ok: true, domain: raw };\n}\n\nfunction stamps(asOf, observed) {\n  if (!asOf || !observed) return null;\n  const stamp = (value) => Date.parse(String(value).length === 10 ? `${value}T00:00:00Z` : value);\n  const left = stamp(asOf);\n  const right = stamp(observed);\n  if (Number.isNaN(left) || Number.isNaN(right)) return null;\n  return { left, right };\n}\n\nfunction observedDateKind(asOf, observed) {\n  const pair = stamps(asOf, observed);\n  if (!pair) return \"missing\";\n  if (pair.right > pair.left) return \"after\";\n  return \"ok\";\n}\n\nfunction ageDays(asOf, observed) {\n  const pair = stamps(asOf, observed);\n  if (!pair || pair.right > pair.left) return null;\n  return Math.floor((pair.left - pair.right) / 86400000);\n}\n\nfunction roundTo(value, places) {\n  const factor = 10 ** places;\n  return Math.round((value + Number.EPSILON) * factor) / factor;\n}\n\nfunction wordCount(text) {\n  return String(text ?? \"\").trim().split(/\\s+/).filter(Boolean).length;\n}\n\nfunction hasToken(text) {\n  return /\\{\\{[^{}]+\\}\\}/.test(String(text ?? \"\"));\n}\n\nfunction scoreSignals({ signals = [], rules, as_of } = {}) {\n  const catalog = new Map((rules?.families ?? []).map((family) => [family.id, family]));\n  const best = new Map();\n  const notes = [];\n  for (const signal of signals) {\n    const family = catalog.get(signal.family);\n    if (!family) {\n      notes.push({ family: signal.family ?? null, reason: \"unknown family\" });\n      continue;\n    }\n    const age = ageDays(as_of, signal.observed_on);\n    let points = 0;\n    if (age == null) {\n      const kind = observedDateKind(as_of, signal.observed_on);\n      notes.push({ family: family.id, reason: kind === \"after\" ? \"date after as_of\" : \"missing date\" });\n    } else if (age > rules.cutoff_days) {\n      notes.push({ family: family.id, reason: \"past cutoff\", age_days: age });\n    } else {\n      const decay = 0.5 ** (Math.max(0, age) / rules.half_life_days);\n      points = family.points * decay;\n    }\n    const prior = best.get(family.id);\n    if (!prior || points > prior.points) {\n      best.set(family.id, { id: family.id, strong: Boolean(family.strong), points, age_days: age });\n    }\n  }\n  const active = [...best.values()].filter((family) => family.points > 0);\n  const base = active.reduce((sum, family) => sum + family.points, 0);\n  const extra = Math.max(0, active.length - 1);\n  const rawMultiplier = extra === 0 ? 1 : rules.stack_per_extra ** extra;\n  const multiplier = Math.min(rules.stack_cap, rawMultiplier);\n  const points = roundTo(base * multiplier, 2);\n  let tier = \"C\";\n  if (points >= rules.tier_a) tier = \"A\";\n  else if (points >= rules.tier_b) tier = \"B\";\n  let singleFamilyCapped = false;\n  if (active.length === 1 && !active[0].strong && tier !== \"C\") {\n    tier = \"C\";\n    singleFamilyCapped = true;\n  }\n  return {\n    points,\n    tier,\n    multiplier: roundTo(multiplier, 2),\n    families: active\n      .map((family) => ({ id: family.id, strong: family.strong, points: roundTo(family.points, 2) }))\n      .sort((a, b) => (a.id < b.id ? -1 : 1)),\n    single_family_capped: singleFamilyCapped,\n    notes,\n  };\n}\n",
+      "output_schema": {
+        "required": [
+          "points",
+          "tier"
+        ],
+        "type": "object",
+        "properties": {
+          "points": {
+            "type": "number"
+          },
+          "tier": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "node_kind": "action",
+      "subtype": "table_row_add"
+    }
+  ],
+  "document": {
+    "description": "Score signals with the local function, then write tiers. Disabled.",
+    "nodes": [
+      {
+        "id": "trigger",
+        "type": "trigger",
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "data": {
+          "kind": "trigger",
+          "subtype": "record_created",
+          "config": {}
+        }
+      },
+      {
+        "id": "code",
+        "type": "action",
+        "position": {
+          "x": 0,
+          "y": 160
+        },
+        "data": {
+          "kind": "action",
+          "subtype": "code",
+          "config": {
+            "source": "function normaliseDomain(value) {\n  if (value == null) return { ok: false, reason: \"missing domain\" };\n  let raw = String(value).trim().toLowerCase();\n  if (!raw) return { ok: false, reason: \"missing domain\" };\n  raw = raw.replace(/^[a-z][a-z0-9+.-]*:\\/\\//, \"\");\n  raw = raw.split(/[/?#]/)[0];\n  raw = raw.replace(/:\\d+$/, \"\");\n  if (raw.startsWith(\"www.\")) raw = raw.slice(4);\n  raw = raw.replace(/\\.$/, \"\");\n  const label = \"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\";\n  const domainShape = new RegExp(`^${label}(?:\\\\.${label})+$`);\n  if (!domainShape.test(raw)) {\n    return { ok: false, reason: \"domain is not usable\" };\n  }\n  return { ok: true, domain: raw };\n}\n\nfunction stamps(asOf, observed) {\n  if (!asOf || !observed) return null;\n  const stamp = (value) => Date.parse(String(value).length === 10 ? `${value}T00:00:00Z` : value);\n  const left = stamp(asOf);\n  const right = stamp(observed);\n  if (Number.isNaN(left) || Number.isNaN(right)) return null;\n  return { left, right };\n}\n\nfunction observedDateKind(asOf, observed) {\n  const pair = stamps(asOf, observed);\n  if (!pair) return \"missing\";\n  if (pair.right > pair.left) return \"after\";\n  return \"ok\";\n}\n\nfunction ageDays(asOf, observed) {\n  const pair = stamps(asOf, observed);\n  if (!pair || pair.right > pair.left) return null;\n  return Math.floor((pair.left - pair.right) / 86400000);\n}\n\nfunction roundTo(value, places) {\n  const factor = 10 ** places;\n  return Math.round((value + Number.EPSILON) * factor) / factor;\n}\n\nfunction wordCount(text) {\n  return String(text ?? \"\").trim().split(/\\s+/).filter(Boolean).length;\n}\n\nfunction hasToken(text) {\n  return /\\{\\{[^{}]+\\}\\}/.test(String(text ?? \"\"));\n}\n\nfunction scoreSignals({ signals = [], rules, as_of } = {}) {\n  const catalog = new Map((rules?.families ?? []).map((family) => [family.id, family]));\n  const best = new Map();\n  const notes = [];\n  for (const signal of signals) {\n    const family = catalog.get(signal.family);\n    if (!family) {\n      notes.push({ family: signal.family ?? null, reason: \"unknown family\" });\n      continue;\n    }\n    const age = ageDays(as_of, signal.observed_on);\n    let points = 0;\n    if (age == null) {\n      const kind = observedDateKind(as_of, signal.observed_on);\n      notes.push({ family: family.id, reason: kind === \"after\" ? \"date after as_of\" : \"missing date\" });\n    } else if (age > rules.cutoff_days) {\n      notes.push({ family: family.id, reason: \"past cutoff\", age_days: age });\n    } else {\n      const decay = 0.5 ** (Math.max(0, age) / rules.half_life_days);\n      points = family.points * decay;\n    }\n    const prior = best.get(family.id);\n    if (!prior || points > prior.points) {\n      best.set(family.id, { id: family.id, strong: Boolean(family.strong), points, age_days: age });\n    }\n  }\n  const active = [...best.values()].filter((family) => family.points > 0);\n  const base = active.reduce((sum, family) => sum + family.points, 0);\n  const extra = Math.max(0, active.length - 1);\n  const rawMultiplier = extra === 0 ? 1 : rules.stack_per_extra ** extra;\n  const multiplier = Math.min(rules.stack_cap, rawMultiplier);\n  const points = roundTo(base * multiplier, 2);\n  let tier = \"C\";\n  if (points >= rules.tier_a) tier = \"A\";\n  else if (points >= rules.tier_b) tier = \"B\";\n  let singleFamilyCapped = false;\n  if (active.length === 1 && !active[0].strong && tier !== \"C\") {\n    tier = \"C\";\n    singleFamilyCapped = true;\n  }\n  return {\n    points,\n    tier,\n    multiplier: roundTo(multiplier, 2),\n    families: active\n      .map((family) => ({ id: family.id, strong: family.strong, points: roundTo(family.points, 2) }))\n      .sort((a, b) => (a.id < b.id ? -1 : 1)),\n    single_family_capped: singleFamilyCapped,\n    notes,\n  };\n}\n",
+            "output_schema": {
+              "required": [
+                "points",
+                "tier"
+              ],
+              "type": "object",
+              "properties": {
+                "points": {
+                  "type": "number"
+                },
+                "tier": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "trigger-to-code",
+        "source": "trigger",
+        "target": "code"
+      }
+    ]
+  },
+  "code_node": "The catalog lists subtype code. The source field holds the function text. The graph stays off, and this machine still runs that function."
+}

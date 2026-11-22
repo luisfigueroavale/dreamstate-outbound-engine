@@ -1,0 +1,5 @@
+{
+  "name": "merge-sources",
+  "kind": "code",
+  "summary": "One account per normalised domain, with every distinct signal kept."
+}

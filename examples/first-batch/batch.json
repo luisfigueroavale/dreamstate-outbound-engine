@@ -1,0 +1,639 @@
+{
+  "fictional": true,
+  "seller": "Palletlane",
+  "note": "Fictional example. No real companies or people.",
+  "as_of": "2026-11-21",
+  "capacity": 5,
+  "capacity_left": 3,
+  "verification_window_days": 14,
+  "word_limit": 90,
+  "sequence_id": "draft-palletlane-1",
+  "offer_line": "Palletlane is a fictional dock booking board.",
+  "roles": [
+    "vp operations",
+    "warehouse manager"
+  ],
+  "company_rubric": {
+    "points": {
+      "region": 30,
+      "size": 25,
+      "shop": 25,
+      "problem": 20
+    },
+    "pass_at": 55,
+    "gates": [
+      {
+        "id": "region",
+        "fail_when": "no"
+      },
+      {
+        "id": "excluded_type",
+        "fail_when": "yes"
+      }
+    ]
+  },
+  "buyer_rubric": {
+    "points": {
+      "title_match": 20,
+      "remit": 40,
+      "authority": 40
+    },
+    "pass_at": 60
+  },
+  "signals": {
+    "half_life_days": 21,
+    "cutoff_days": 90,
+    "stack_per_extra": 1.1,
+    "stack_cap": 1.3,
+    "tier_a": 40,
+    "tier_b": 18,
+    "buyers_per_tier": {
+      "A": 2,
+      "B": 3,
+      "C": 0
+    },
+    "families": [
+      {
+        "id": "hiring",
+        "points": 12,
+        "strong": false
+      },
+      {
+        "id": "route_news",
+        "points": 10,
+        "strong": false
+      },
+      {
+        "id": "system_move",
+        "points": 24,
+        "strong": true
+      },
+      {
+        "id": "new_leader",
+        "points": 22,
+        "strong": true
+      },
+      {
+        "id": "past_champion",
+        "points": 46,
+        "strong": true
+      }
+    ]
+  },
+  "test": {
+    "test_id": "palletlane-door-line",
+    "audience": "warehouse-docks",
+    "prompt_version": "v0",
+    "changed_variable": "the first sentence",
+    "variants": [
+      "We book the door before the truck arrives.",
+      "The dock stays on one board."
+    ]
+  },
+  "records": [
+    {
+      "source_id": "list-1",
+      "domain": "https://www.dock-north.example/about",
+      "name": "Dock North",
+      "signals": [
+        {
+          "family": "hiring",
+          "observed_on": "2026-11-21",
+          "detail": "hiring a warehouse manager"
+        }
+      ]
+    },
+    {
+      "source_id": "web-1",
+      "domain": "dock-north.example",
+      "name": "Dock North",
+      "signals": [
+        {
+          "family": "route_news",
+          "observed_on": "2026-11-21",
+          "detail": "a new inbound route"
+        }
+      ]
+    },
+    {
+      "source_id": "bad-1",
+      "domain": "not a domain",
+      "name": "Bad Row",
+      "signals": []
+    },
+    {
+      "source_id": "split-a",
+      "domain": "acme-split.example",
+      "name": "Acme Freight",
+      "signals": []
+    },
+    {
+      "source_id": "split-b",
+      "domain": "acme-split.example",
+      "name": "Acme Dental",
+      "signals": []
+    },
+    {
+      "source_id": "list-2",
+      "domain": "cold-storage-east.example",
+      "name": "Cold Storage East",
+      "signals": [
+        {
+          "family": "past_champion",
+          "observed_on": "2026-11-21",
+          "detail": "a past buyer"
+        }
+      ]
+    },
+    {
+      "source_id": "list-3",
+      "domain": "paper-broker.example",
+      "name": "Paper Broker",
+      "signals": [
+        {
+          "family": "hiring",
+          "observed_on": "2026-11-21",
+          "detail": "a clerk role"
+        }
+      ]
+    },
+    {
+      "source_id": "list-4",
+      "domain": "city-hall-yards.example",
+      "name": "City Hall Yards",
+      "signals": []
+    },
+    {
+      "source_id": "list-5",
+      "domain": "quiet-shed.example",
+      "name": "Quiet Shed",
+      "signals": [
+        {
+          "family": "system_move",
+          "observed_on": "2026-11-21",
+          "detail": "a system change"
+        }
+      ]
+    },
+    {
+      "source_id": "list-6",
+      "domain": "lone-weak.example",
+      "name": "Lone Weak",
+      "signals": [
+        {
+          "family": "hiring",
+          "observed_on": "2026-11-21",
+          "detail": "one posting"
+        }
+      ]
+    },
+    {
+      "source_id": "list-7",
+      "domain": "old-posting.example",
+      "name": "Old Posting",
+      "signals": [
+        {
+          "family": "hiring",
+          "observed_on": "2026-08-01",
+          "detail": "an old posting"
+        }
+      ]
+    },
+    {
+      "source_id": "list-8",
+      "domain": "champion-return.example",
+      "name": "Champion Return",
+      "signals": [
+        {
+          "family": "past_champion",
+          "observed_on": "2026-11-21",
+          "detail": "a past buyer now on site"
+        }
+      ]
+    },
+    {
+      "source_id": "list-9",
+      "domain": "river-dock.example",
+      "name": "River Dock",
+      "signals": [
+        {
+          "family": "system_move",
+          "observed_on": "2026-11-21",
+          "detail": "a system change"
+        },
+        {
+          "family": "new_leader",
+          "observed_on": "2026-11-21",
+          "detail": "a new operations lead"
+        }
+      ]
+    },
+    {
+      "source_id": "list-10",
+      "domain": "north-lane.example",
+      "name": "North Lane",
+      "signals": [
+        {
+          "family": "system_move",
+          "observed_on": "2026-11-21",
+          "detail": "a system change"
+        }
+      ]
+    },
+    {
+      "source_id": "list-11",
+      "domain": "south-pier.example",
+      "name": "South Pier",
+      "signals": [
+        {
+          "family": "hiring",
+          "observed_on": "2026-11-21",
+          "detail": "hiring a warehouse manager"
+        },
+        {
+          "family": "route_news",
+          "observed_on": "2026-11-21",
+          "detail": "a new route"
+        }
+      ]
+    },
+    {
+      "source_id": "list-12",
+      "domain": "mill-yard.example",
+      "name": "Mill Yard",
+      "signals": [
+        {
+          "family": "new_leader",
+          "observed_on": "2026-11-21",
+          "detail": "a new operations lead"
+        }
+      ]
+    }
+  ],
+  "companies": {
+    "dock-north.example": {
+      "answers": {
+        "region": "yes",
+        "size": "yes",
+        "shop": "yes",
+        "problem": "unknown",
+        "excluded_type": "no"
+      },
+      "suppression": "clear",
+      "observation": "Dock North posted a warehouse manager role this week.",
+      "buyer_answers": {
+        "title_match": "yes",
+        "remit": "yes",
+        "authority": "yes",
+        "disqualified": "no"
+      },
+      "people": [
+        {
+          "name": "Ada North",
+          "title": "Warehouse Manager",
+          "profile_url": "https://people.example/ada-north",
+          "employer_domain": "dock-north.example"
+        }
+      ],
+      "email": {
+        "address": "ada@dock-north.example",
+        "waterfall_status": "catch_all",
+        "verification_status": "catch_all",
+        "checked_on": "2026-11-18"
+      }
+    },
+    "cold-storage-east.example": {
+      "answers": {
+        "region": "yes",
+        "size": "yes",
+        "shop": "yes",
+        "problem": "yes",
+        "excluded_type": "yes"
+      },
+      "suppression": "clear",
+      "people": [],
+      "buyer_answers": {}
+    },
+    "paper-broker.example": {
+      "answers": {
+        "region": "yes",
+        "size": "no",
+        "shop": "no",
+        "problem": "no",
+        "excluded_type": "yes"
+      },
+      "suppression": "clear",
+      "people": [],
+      "buyer_answers": {}
+    },
+    "city-hall-yards.example": {
+      "answers": {
+        "region": "no",
+        "size": "yes",
+        "shop": "yes",
+        "problem": "unknown",
+        "excluded_type": "no"
+      },
+      "suppression": "clear",
+      "people": [],
+      "buyer_answers": {}
+    },
+    "quiet-shed.example": {
+      "answers": {
+        "region": "yes",
+        "size": "yes",
+        "shop": "yes",
+        "problem": "yes",
+        "excluded_type": "no"
+      },
+      "suppression": "listed",
+      "people": [],
+      "buyer_answers": {}
+    },
+    "lone-weak.example": {
+      "answers": {
+        "region": "yes",
+        "size": "yes",
+        "shop": "yes",
+        "problem": "unknown",
+        "excluded_type": "no"
+      },
+      "suppression": "clear",
+      "people": [],
+      "buyer_answers": {}
+    },
+    "old-posting.example": {
+      "answers": {
+        "region": "yes",
+        "size": "yes",
+        "shop": "yes",
+        "problem": "unknown",
+        "excluded_type": "no"
+      },
+      "suppression": "clear",
+      "people": [],
+      "buyer_answers": {}
+    },
+    "champion-return.example": {
+      "answers": {
+        "region": "yes",
+        "size": "yes",
+        "shop": "yes",
+        "problem": "yes",
+        "excluded_type": "no"
+      },
+      "suppression": "clear",
+      "observation": "A former buyer now leads operations at this warehouse.",
+      "buyer_answers": {
+        "title_match": "yes",
+        "remit": "yes",
+        "authority": "yes",
+        "disqualified": "no"
+      },
+      "people": [
+        {
+          "name": "Nia Pell",
+          "title": "VP Operations",
+          "profile_url": "https://people.example/nia-pell",
+          "employer_domain": "champion-return.example"
+        }
+      ],
+      "email": {
+        "address": "nia@champion-return.example",
+        "waterfall_status": "valid",
+        "verification_status": "valid",
+        "checked_on": "2026-11-18"
+      }
+    },
+    "river-dock.example": {
+      "answers": {
+        "region": "yes",
+        "size": "yes",
+        "shop": "yes",
+        "problem": "yes",
+        "excluded_type": "no"
+      },
+      "suppression": "clear",
+      "observation": "River Dock named a new operations lead beside a system change.",
+      "buyer_answers": {
+        "title_match": "yes",
+        "remit": "unknown",
+        "authority": "unknown",
+        "disqualified": "no"
+      },
+      "people": [
+        {
+          "name": "Cal Voss",
+          "title": "VP Operations",
+          "profile_url": "https://people.example/cal-voss",
+          "employer_domain": "river-dock.example"
+        }
+      ],
+      "email": {
+        "address": null,
+        "waterfall_status": "unknown",
+        "verification_status": "unknown",
+        "checked_on": null
+      }
+    },
+    "north-lane.example": {
+      "answers": {
+        "region": "yes",
+        "size": "yes",
+        "shop": "yes",
+        "problem": "unknown",
+        "excluded_type": "no"
+      },
+      "suppression": "clear",
+      "observation": "North Lane is moving its dock system.",
+      "buyer_answers": {
+        "title_match": "yes",
+        "remit": "yes",
+        "authority": "yes",
+        "disqualified": "no"
+      },
+      "people": [
+        {
+          "name": "Bea Lane",
+          "title": "VP Operations",
+          "profile_url": "https://people.example/bea-lane",
+          "employer_domain": "other-yard.example"
+        }
+      ],
+      "email": {
+        "address": "bea@north-lane.example",
+        "waterfall_status": "valid",
+        "verification_status": "valid",
+        "checked_on": "2026-11-18"
+      }
+    },
+    "south-pier.example": {
+      "answers": {
+        "region": "yes",
+        "size": "yes",
+        "shop": "yes",
+        "problem": "yes",
+        "excluded_type": "no"
+      },
+      "suppression": "clear",
+      "observation": "South Pier is hiring a warehouse manager and adding a route.",
+      "buyer_answers": {
+        "title_match": "yes",
+        "remit": "yes",
+        "authority": "yes",
+        "disqualified": "no"
+      },
+      "people": [
+        {
+          "name": "Sol Pier",
+          "title": "Warehouse Manager",
+          "profile_url": "https://people.example/sol-pier",
+          "employer_domain": "south-pier.example"
+        }
+      ],
+      "email": {
+        "address": "sol@south-pier.example",
+        "waterfall_status": "valid",
+        "verification_status": "valid",
+        "checked_on": "2026-10-01"
+      }
+    },
+    "mill-yard.example": {
+      "answers": {
+        "region": "yes",
+        "size": "yes",
+        "shop": "yes",
+        "problem": "unknown",
+        "excluded_type": "no"
+      },
+      "suppression": "clear",
+      "people": [],
+      "buyer_answers": {}
+    }
+  },
+  "history": {
+    "floor": 100,
+    "events": [
+      {
+        "test_id": "palletlane-door-line",
+        "audience": "warehouse-docks",
+        "variant": "We book the door before the truck arrives.",
+        "prompt_version": "v0",
+        "message_id": "hist-1",
+        "delivered": true,
+        "positive_reply": true,
+        "meeting": false
+      },
+      {
+        "test_id": "palletlane-door-line",
+        "audience": "warehouse-docks",
+        "variant": "We book the door before the truck arrives.",
+        "prompt_version": "v0",
+        "message_id": "hist-2",
+        "delivered": true,
+        "positive_reply": true,
+        "meeting": false
+      },
+      {
+        "test_id": "palletlane-door-line",
+        "audience": "warehouse-docks",
+        "variant": "We book the door before the truck arrives.",
+        "prompt_version": "v0",
+        "message_id": "hist-3",
+        "delivered": true,
+        "positive_reply": false,
+        "meeting": false
+      },
+      {
+        "test_id": "palletlane-door-line",
+        "audience": "warehouse-docks",
+        "variant": "We book the door before the truck arrives.",
+        "prompt_version": "v0",
+        "message_id": "hist-4",
+        "delivered": true,
+        "positive_reply": false,
+        "meeting": false
+      },
+      {
+        "test_id": "palletlane-door-line",
+        "audience": "warehouse-docks",
+        "variant": "We book the door before the truck arrives.",
+        "prompt_version": "v0",
+        "message_id": "hist-5",
+        "delivered": true,
+        "positive_reply": false,
+        "meeting": false
+      },
+      {
+        "test_id": "palletlane-door-line",
+        "audience": "warehouse-docks",
+        "variant": "We book the door before the truck arrives.",
+        "prompt_version": "v0",
+        "message_id": "hist-6",
+        "delivered": true,
+        "positive_reply": false,
+        "meeting": false
+      },
+      {
+        "test_id": "palletlane-door-line",
+        "audience": "warehouse-docks",
+        "variant": "We book the door before the truck arrives.",
+        "prompt_version": "v0",
+        "message_id": "hist-7",
+        "delivered": true,
+        "positive_reply": false,
+        "meeting": false
+      },
+      {
+        "test_id": "palletlane-door-line",
+        "audience": "warehouse-docks",
+        "variant": "We book the door before the truck arrives.",
+        "prompt_version": "v0",
+        "message_id": "hist-8",
+        "delivered": true,
+        "positive_reply": false,
+        "meeting": false
+      },
+      {
+        "test_id": "palletlane-door-line",
+        "audience": "warehouse-docks",
+        "variant": "We book the door before the truck arrives.",
+        "prompt_version": "v0",
+        "message_id": "hist-9",
+        "delivered": true,
+        "positive_reply": false,
+        "meeting": false
+      },
+      {
+        "test_id": "palletlane-door-line",
+        "audience": "warehouse-docks",
+        "variant": "We book the door before the truck arrives.",
+        "prompt_version": "v0",
+        "message_id": "hist-10",
+        "delivered": true,
+        "positive_reply": false,
+        "meeting": false
+      },
+      {
+        "test_id": "palletlane-door-line",
+        "audience": "warehouse-docks",
+        "variant": "We book the door before the truck arrives.",
+        "prompt_version": "v0",
+        "message_id": "hist-11",
+        "delivered": true,
+        "positive_reply": false,
+        "meeting": false
+      },
+      {
+        "test_id": "palletlane-door-line",
+        "audience": "warehouse-docks",
+        "variant": "We book the door before the truck arrives.",
+        "prompt_version": "v0",
+        "message_id": "hist-12",
+        "delivered": true,
+        "positive_reply": false,
+        "meeting": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "function": "merge-sources",
+  "note": "Offline fixture. The tests call the function directly."
+}

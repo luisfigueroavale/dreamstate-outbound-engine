@@ -1,0 +1,4 @@
+{
+  "function": "find-work-email",
+  "note": "Offline fixture. The tests call the function directly."
+}

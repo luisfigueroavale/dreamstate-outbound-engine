@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "required": ["fictional", "seller", "funnel", "credits", "sent"],
+  "properties": {
+    "fictional": { "const": true },
+    "seller": { "type": "string" },
+    "credits": { "const": 0 },
+    "sent": { "const": 0 },
+    "funnel": { "type": "object" }
+  }
+}

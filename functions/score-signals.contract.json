@@ -1,0 +1,5 @@
+{
+  "name": "score-signals",
+  "kind": "code",
+  "summary": "Half life decay, stacking cap, and tiers from the signal file."
+}

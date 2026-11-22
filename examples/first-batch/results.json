@@ -1,0 +1,499 @@
+{
+  "fictional": true,
+  "seller": "Palletlane",
+  "as_of": "2026-11-21",
+  "capacity": 5,
+  "credits": 0,
+  "sent": 0,
+  "funnel": {
+    "records": 16,
+    "rejected": 2,
+    "accounts": 12,
+    "tier_a": 3,
+    "tier_b": 5,
+    "tier_c": 4,
+    "selected_accounts": 5,
+    "buyers": 3,
+    "verified_emails": 2,
+    "ready": 0,
+    "sent": 0,
+    "credits": 0
+  },
+  "rejected": [
+    {
+      "source_id": "bad-1",
+      "domain": "not a domain",
+      "reason": "domain is not usable"
+    },
+    {
+      "source_id": "split-a,split-b",
+      "domain": "acme-split.example",
+      "source_ids": [
+        "split-a",
+        "split-b"
+      ],
+      "names": [
+        "Acme Freight",
+        "Acme Dental"
+      ],
+      "reason": "identity not proven"
+    }
+  ],
+  "accounts": [
+    {
+      "domain": "champion-return.example",
+      "names": [
+        "Champion Return"
+      ],
+      "source_ids": [
+        "list-8"
+      ],
+      "signal_count": 1,
+      "fit_score": 100,
+      "fit_passed": true,
+      "excluded": false,
+      "unknowns": [],
+      "suppression": "clear",
+      "suppressed": false,
+      "tier": "A",
+      "signal_points": 46,
+      "signal_families": [
+        "past_champion"
+      ],
+      "single_family_capped": false,
+      "signal_notes": [],
+      "selected": true,
+      "hold": null,
+      "rank": 2
+    },
+    {
+      "domain": "city-hall-yards.example",
+      "names": [
+        "City Hall Yards"
+      ],
+      "source_ids": [
+        "list-4"
+      ],
+      "signal_count": 0,
+      "fit_score": 50,
+      "fit_passed": false,
+      "excluded": true,
+      "unknowns": [
+        "problem"
+      ],
+      "suppression": "clear",
+      "suppressed": false,
+      "tier": "C",
+      "signal_points": 0,
+      "signal_families": [],
+      "single_family_capped": false,
+      "signal_notes": [],
+      "selected": false,
+      "hold": "company fit did not pass",
+      "rank": null
+    },
+    {
+      "domain": "cold-storage-east.example",
+      "names": [
+        "Cold Storage East"
+      ],
+      "source_ids": [
+        "list-2"
+      ],
+      "signal_count": 1,
+      "fit_score": 100,
+      "fit_passed": false,
+      "excluded": true,
+      "unknowns": [],
+      "suppression": "clear",
+      "suppressed": false,
+      "tier": "A",
+      "signal_points": 46,
+      "signal_families": [
+        "past_champion"
+      ],
+      "single_family_capped": false,
+      "signal_notes": [],
+      "selected": false,
+      "hold": "company fit did not pass",
+      "rank": null
+    },
+    {
+      "domain": "dock-north.example",
+      "names": [
+        "Dock North"
+      ],
+      "source_ids": [
+        "list-1",
+        "web-1"
+      ],
+      "signal_count": 2,
+      "fit_score": 80,
+      "fit_passed": true,
+      "excluded": false,
+      "unknowns": [
+        "problem"
+      ],
+      "suppression": "clear",
+      "suppressed": false,
+      "tier": "B",
+      "signal_points": 24.2,
+      "signal_families": [
+        "hiring",
+        "route_news"
+      ],
+      "single_family_capped": false,
+      "signal_notes": [],
+      "selected": true,
+      "hold": null,
+      "rank": 4
+    },
+    {
+      "domain": "lone-weak.example",
+      "names": [
+        "Lone Weak"
+      ],
+      "source_ids": [
+        "list-6"
+      ],
+      "signal_count": 1,
+      "fit_score": 80,
+      "fit_passed": true,
+      "excluded": false,
+      "unknowns": [
+        "problem"
+      ],
+      "suppression": "clear",
+      "suppressed": false,
+      "tier": "C",
+      "signal_points": 12,
+      "signal_families": [
+        "hiring"
+      ],
+      "single_family_capped": false,
+      "signal_notes": [],
+      "selected": false,
+      "hold": "tier C, no further spend",
+      "rank": null
+    },
+    {
+      "domain": "mill-yard.example",
+      "names": [
+        "Mill Yard"
+      ],
+      "source_ids": [
+        "list-12"
+      ],
+      "signal_count": 1,
+      "fit_score": 80,
+      "fit_passed": true,
+      "excluded": false,
+      "unknowns": [
+        "problem"
+      ],
+      "suppression": "clear",
+      "suppressed": false,
+      "tier": "B",
+      "signal_points": 22,
+      "signal_families": [
+        "new_leader"
+      ],
+      "single_family_capped": false,
+      "signal_notes": [],
+      "selected": false,
+      "hold": "capacity",
+      "rank": null
+    },
+    {
+      "domain": "north-lane.example",
+      "names": [
+        "North Lane"
+      ],
+      "source_ids": [
+        "list-10"
+      ],
+      "signal_count": 1,
+      "fit_score": 80,
+      "fit_passed": true,
+      "excluded": false,
+      "unknowns": [
+        "problem"
+      ],
+      "suppression": "clear",
+      "suppressed": false,
+      "tier": "B",
+      "signal_points": 24,
+      "signal_families": [
+        "system_move"
+      ],
+      "single_family_capped": false,
+      "signal_notes": [],
+      "selected": true,
+      "hold": null,
+      "rank": 5
+    },
+    {
+      "domain": "old-posting.example",
+      "names": [
+        "Old Posting"
+      ],
+      "source_ids": [
+        "list-7"
+      ],
+      "signal_count": 1,
+      "fit_score": 80,
+      "fit_passed": true,
+      "excluded": false,
+      "unknowns": [
+        "problem"
+      ],
+      "suppression": "clear",
+      "suppressed": false,
+      "tier": "C",
+      "signal_points": 0,
+      "signal_families": [],
+      "single_family_capped": false,
+      "signal_notes": [
+        {
+          "family": "hiring",
+          "reason": "past cutoff",
+          "age_days": 112
+        }
+      ],
+      "selected": false,
+      "hold": "tier C, no further spend",
+      "rank": null
+    },
+    {
+      "domain": "paper-broker.example",
+      "names": [
+        "Paper Broker"
+      ],
+      "source_ids": [
+        "list-3"
+      ],
+      "signal_count": 1,
+      "fit_score": 30,
+      "fit_passed": false,
+      "excluded": true,
+      "unknowns": [],
+      "suppression": "clear",
+      "suppressed": false,
+      "tier": "C",
+      "signal_points": 12,
+      "signal_families": [
+        "hiring"
+      ],
+      "single_family_capped": false,
+      "signal_notes": [],
+      "selected": false,
+      "hold": "company fit did not pass",
+      "rank": null
+    },
+    {
+      "domain": "quiet-shed.example",
+      "names": [
+        "Quiet Shed"
+      ],
+      "source_ids": [
+        "list-5"
+      ],
+      "signal_count": 1,
+      "fit_score": 100,
+      "fit_passed": true,
+      "excluded": false,
+      "unknowns": [],
+      "suppression": "listed",
+      "suppressed": true,
+      "tier": "B",
+      "signal_points": 24,
+      "signal_families": [
+        "system_move"
+      ],
+      "single_family_capped": false,
+      "signal_notes": [],
+      "selected": false,
+      "hold": "suppressed",
+      "rank": null
+    },
+    {
+      "domain": "river-dock.example",
+      "names": [
+        "River Dock"
+      ],
+      "source_ids": [
+        "list-9"
+      ],
+      "signal_count": 2,
+      "fit_score": 100,
+      "fit_passed": true,
+      "excluded": false,
+      "unknowns": [],
+      "suppression": "clear",
+      "suppressed": false,
+      "tier": "A",
+      "signal_points": 50.6,
+      "signal_families": [
+        "new_leader",
+        "system_move"
+      ],
+      "single_family_capped": false,
+      "signal_notes": [],
+      "selected": true,
+      "hold": null,
+      "rank": 1
+    },
+    {
+      "domain": "south-pier.example",
+      "names": [
+        "South Pier"
+      ],
+      "source_ids": [
+        "list-11"
+      ],
+      "signal_count": 2,
+      "fit_score": 100,
+      "fit_passed": true,
+      "excluded": false,
+      "unknowns": [],
+      "suppression": "clear",
+      "suppressed": false,
+      "tier": "B",
+      "signal_points": 24.2,
+      "signal_families": [
+        "hiring",
+        "route_news"
+      ],
+      "single_family_capped": false,
+      "signal_notes": [],
+      "selected": true,
+      "hold": null,
+      "rank": 3
+    }
+  ],
+  "buyer_holds": [
+    {
+      "domain": "river-dock.example",
+      "tier": "A",
+      "company_fit_passed": true,
+      "buyer_fit_passed": false,
+      "suppressed": false,
+      "score": 20,
+      "person": {
+        "name": "Cal Voss",
+        "title": "VP Operations",
+        "profile_url": "https://people.example/cal-voss",
+        "role": "vp operations",
+        "employer_domain": "river-dock.example"
+      },
+      "hold_detail": "title alone never proves authority",
+      "unknowns": [
+        "remit",
+        "authority"
+      ],
+      "selected": false,
+      "hold": "gate did not pass"
+    },
+    {
+      "domain": "north-lane.example",
+      "tier": "B",
+      "company_fit_passed": true,
+      "buyer_fit_passed": false,
+      "suppressed": false,
+      "score": 0,
+      "hold_detail": "current employer not confirmed",
+      "selected": false,
+      "hold": "gate did not pass"
+    }
+  ],
+  "messages": [
+    {
+      "domain": "champion-return.example",
+      "person": {
+        "name": "Nia Pell",
+        "title": "VP Operations",
+        "profile_url": "https://people.example/nia-pell",
+        "role": "vp operations",
+        "employer_domain": "champion-return.example"
+      },
+      "email_status": "valid",
+      "email_hold": null,
+      "variant": "We book the door before the truck arrives.",
+      "hex8": "37b751aa",
+      "body": "A former buyer now leads operations at this warehouse. We book the door before the truck arrives. Palletlane is a fictional dock booking board.",
+      "reviewed": false,
+      "ready": false,
+      "holds": [
+        "not reviewed"
+      ]
+    },
+    {
+      "domain": "dock-north.example",
+      "person": {
+        "name": "Ada North",
+        "title": "Warehouse Manager",
+        "profile_url": "https://people.example/ada-north",
+        "role": "warehouse manager",
+        "employer_domain": "dock-north.example"
+      },
+      "email_status": "catch_all",
+      "email_hold": "catch-all is held",
+      "variant": "The dock stays on one board.",
+      "hex8": "9fb3af0b",
+      "body": "Dock North posted a warehouse manager role this week. The dock stays on one board. Palletlane is a fictional dock booking board.",
+      "reviewed": false,
+      "ready": false,
+      "holds": [
+        "catch-all is held",
+        "not reviewed"
+      ]
+    },
+    {
+      "domain": "south-pier.example",
+      "person": {
+        "name": "Sol Pier",
+        "title": "Warehouse Manager",
+        "profile_url": "https://people.example/sol-pier",
+        "role": "warehouse manager",
+        "employer_domain": "south-pier.example"
+      },
+      "email_status": "valid",
+      "email_hold": null,
+      "variant": "We book the door before the truck arrives.",
+      "hex8": "8680eb16",
+      "body": "South Pier is hiring a warehouse manager and adding a route. We book the door before the truck arrives. Palletlane is a fictional dock booking board.",
+      "reviewed": false,
+      "ready": false,
+      "holds": [
+        "verification is stale",
+        "not reviewed"
+      ]
+    }
+  ],
+  "history": {
+    "ok": true,
+    "error": null,
+    "comparisons": [
+      {
+        "test_id": "palletlane-door-line",
+        "audience": "warehouse-docks",
+        "prompt_version": "v0",
+        "floor": 100,
+        "variants": [
+          {
+            "variant": "We book the door before the truck arrives.",
+            "delivered": 12,
+            "positive_replies": 2,
+            "meetings": 0,
+            "positive_rate": 0.1667,
+            "interval": {
+              "low": 0.047,
+              "high": 0.448
+            },
+            "verdict": "too little data"
+          }
+        ]
+      }
+    ]
+  }
+}

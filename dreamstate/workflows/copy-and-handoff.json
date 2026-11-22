@@ -1,0 +1,101 @@
+{
+  "kind": "workflow",
+  "status": "disabled",
+  "name": "copy-and-handoff",
+  "summary": "Draft the first touch and stop at an approval before any enrollment. Disabled.",
+  "import_with": "workflow.automations.import",
+  "preflight_with": "workflow.automations.import_preflight",
+  "lint_with": "workflow.automations.lint",
+  "nodes": [
+    {
+      "node_kind": "action",
+      "subtype": "code",
+      "source": "function normaliseDomain(value) {\n  if (value == null) return { ok: false, reason: \"missing domain\" };\n  let raw = String(value).trim().toLowerCase();\n  if (!raw) return { ok: false, reason: \"missing domain\" };\n  raw = raw.replace(/^[a-z][a-z0-9+.-]*:\\/\\//, \"\");\n  raw = raw.split(/[/?#]/)[0];\n  raw = raw.replace(/:\\d+$/, \"\");\n  if (raw.startsWith(\"www.\")) raw = raw.slice(4);\n  raw = raw.replace(/\\.$/, \"\");\n  const label = \"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\";\n  const domainShape = new RegExp(`^${label}(?:\\\\.${label})+$`);\n  if (!domainShape.test(raw)) {\n    return { ok: false, reason: \"domain is not usable\" };\n  }\n  return { ok: true, domain: raw };\n}\n\nfunction stamps(asOf, observed) {\n  if (!asOf || !observed) return null;\n  const stamp = (value) => Date.parse(String(value).length === 10 ? `${value}T00:00:00Z` : value);\n  const left = stamp(asOf);\n  const right = stamp(observed);\n  if (Number.isNaN(left) || Number.isNaN(right)) return null;\n  return { left, right };\n}\n\nfunction observedDateKind(asOf, observed) {\n  const pair = stamps(asOf, observed);\n  if (!pair) return \"missing\";\n  if (pair.right > pair.left) return \"after\";\n  return \"ok\";\n}\n\nfunction ageDays(asOf, observed) {\n  const pair = stamps(asOf, observed);\n  if (!pair || pair.right > pair.left) return null;\n  return Math.floor((pair.left - pair.right) / 86400000);\n}\n\nfunction roundTo(value, places) {\n  const factor = 10 ** places;\n  return Math.round((value + Number.EPSILON) * factor) / factor;\n}\n\nfunction wordCount(text) {\n  return String(text ?? \"\").trim().split(/\\s+/).filter(Boolean).length;\n}\n\nfunction hasToken(text) {\n  return /\\{\\{[^{}]+\\}\\}/.test(String(text ?? \"\"));\n}\n\nfunction checkSendReady(row = {}) {\n  const holds = [];\n  const windowDays = row.verification_window_days ?? 14;\n  const wordLimit = row.word_limit ?? 90;\n  if (!row.company_fit_passed) holds.push(\"company fit did not pass\");\n  if (!row.buyer_fit_passed) holds.push(\"buyer fit did not pass\");\n  if (row.email_status === \"catch_all\") holds.push(\"catch-all is held\");\n  else if (row.email_status === \"unknown\" || row.email_status == null) holds.push(\"unknown email is held\");\n  else if (row.email_status !== \"valid\") holds.push(\"email is not valid\");\n  if (row.email_status === \"valid\") {\n    const age = ageDays(row.as_of, row.verified_on);\n    if (age == null) holds.push(\"verification date missing\");\n    else if (age > windowDays) holds.push(\"verification is stale\");\n  }\n  if (row.reviewed !== true) holds.push(\"not reviewed\");\n  if (row.suppression !== \"clear\") holds.push(\"suppression is not clear\");\n  if (!(Number(row.capacity_left) > 0)) holds.push(\"no capacity left\");\n  if (!row.sequence_id) holds.push(\"draft sequence id missing\");\n  if (!row.test_id || !row.variant) holds.push(\"test ids missing\");\n  if (hasToken(row.body)) holds.push(\"unresolved token\");\n  const words = wordCount(row.body);\n  if (words === 0) holds.push(\"message body is missing\");\n  else if (words > wordLimit) holds.push(\"over the word limit\");\n  return { ready: holds.length === 0, holds, words };\n}\n",
+      "output_schema": {
+        "required": [
+          "is_ready",
+          "hold_list",
+          "word_count"
+        ],
+        "type": "object",
+        "properties": {
+          "is_ready": {
+            "type": "boolean"
+          },
+          "hold_list": {
+            "type": "array"
+          },
+          "word_count": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "node_kind": "action",
+      "subtype": "request_approval"
+    }
+  ],
+  "document": {
+    "description": "Draft the first touch and stop at an approval before any enrollment. Disabled.",
+    "nodes": [
+      {
+        "id": "trigger",
+        "type": "trigger",
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "data": {
+          "kind": "trigger",
+          "subtype": "record_created",
+          "config": {}
+        }
+      },
+      {
+        "id": "code",
+        "type": "action",
+        "position": {
+          "x": 0,
+          "y": 160
+        },
+        "data": {
+          "kind": "action",
+          "subtype": "code",
+          "config": {
+            "source": "function normaliseDomain(value) {\n  if (value == null) return { ok: false, reason: \"missing domain\" };\n  let raw = String(value).trim().toLowerCase();\n  if (!raw) return { ok: false, reason: \"missing domain\" };\n  raw = raw.replace(/^[a-z][a-z0-9+.-]*:\\/\\//, \"\");\n  raw = raw.split(/[/?#]/)[0];\n  raw = raw.replace(/:\\d+$/, \"\");\n  if (raw.startsWith(\"www.\")) raw = raw.slice(4);\n  raw = raw.replace(/\\.$/, \"\");\n  const label = \"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\";\n  const domainShape = new RegExp(`^${label}(?:\\\\.${label})+$`);\n  if (!domainShape.test(raw)) {\n    return { ok: false, reason: \"domain is not usable\" };\n  }\n  return { ok: true, domain: raw };\n}\n\nfunction stamps(asOf, observed) {\n  if (!asOf || !observed) return null;\n  const stamp = (value) => Date.parse(String(value).length === 10 ? `${value}T00:00:00Z` : value);\n  const left = stamp(asOf);\n  const right = stamp(observed);\n  if (Number.isNaN(left) || Number.isNaN(right)) return null;\n  return { left, right };\n}\n\nfunction observedDateKind(asOf, observed) {\n  const pair = stamps(asOf, observed);\n  if (!pair) return \"missing\";\n  if (pair.right > pair.left) return \"after\";\n  return \"ok\";\n}\n\nfunction ageDays(asOf, observed) {\n  const pair = stamps(asOf, observed);\n  if (!pair || pair.right > pair.left) return null;\n  return Math.floor((pair.left - pair.right) / 86400000);\n}\n\nfunction roundTo(value, places) {\n  const factor = 10 ** places;\n  return Math.round((value + Number.EPSILON) * factor) / factor;\n}\n\nfunction wordCount(text) {\n  return String(text ?? \"\").trim().split(/\\s+/).filter(Boolean).length;\n}\n\nfunction hasToken(text) {\n  return /\\{\\{[^{}]+\\}\\}/.test(String(text ?? \"\"));\n}\n\nfunction checkSendReady(row = {}) {\n  const holds = [];\n  const windowDays = row.verification_window_days ?? 14;\n  const wordLimit = row.word_limit ?? 90;\n  if (!row.company_fit_passed) holds.push(\"company fit did not pass\");\n  if (!row.buyer_fit_passed) holds.push(\"buyer fit did not pass\");\n  if (row.email_status === \"catch_all\") holds.push(\"catch-all is held\");\n  else if (row.email_status === \"unknown\" || row.email_status == null) holds.push(\"unknown email is held\");\n  else if (row.email_status !== \"valid\") holds.push(\"email is not valid\");\n  if (row.email_status === \"valid\") {\n    const age = ageDays(row.as_of, row.verified_on);\n    if (age == null) holds.push(\"verification date missing\");\n    else if (age > windowDays) holds.push(\"verification is stale\");\n  }\n  if (row.reviewed !== true) holds.push(\"not reviewed\");\n  if (row.suppression !== \"clear\") holds.push(\"suppression is not clear\");\n  if (!(Number(row.capacity_left) > 0)) holds.push(\"no capacity left\");\n  if (!row.sequence_id) holds.push(\"draft sequence id missing\");\n  if (!row.test_id || !row.variant) holds.push(\"test ids missing\");\n  if (hasToken(row.body)) holds.push(\"unresolved token\");\n  const words = wordCount(row.body);\n  if (words === 0) holds.push(\"message body is missing\");\n  else if (words > wordLimit) holds.push(\"over the word limit\");\n  return { ready: holds.length === 0, holds, words };\n}\n",
+            "output_schema": {
+              "required": [
+                "is_ready",
+                "hold_list",
+                "word_count"
+              ],
+              "type": "object",
+              "properties": {
+                "is_ready": {
+                  "type": "boolean"
+                },
+                "hold_list": {
+                  "type": "array"
+                },
+                "word_count": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "trigger-to-code",
+        "source": "trigger",
+        "target": "code"
+      }
+    ]
+  },
+  "code_node": "The catalog lists subtype code. The source field holds the function text. The graph stays off, and this machine still runs that function."
+}

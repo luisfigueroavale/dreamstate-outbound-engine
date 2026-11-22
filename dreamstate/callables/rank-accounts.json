@@ -1,0 +1,7 @@
+{
+  "kind": "callable",
+  "status": "disabled",
+  "step": "rank-accounts",
+  "publish_with": "tables.callables.publish",
+  "local_function": "functions/rank-accounts.mjs"
+}

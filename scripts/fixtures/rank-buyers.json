@@ -1,0 +1,4 @@
+{
+  "function": "rank-buyers",
+  "note": "Offline fixture. The tests call the function directly."
+}

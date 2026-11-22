@@ -1,0 +1,21 @@
+{
+  "name": "dreamstate-outbound-engine",
+  "private": true,
+  "type": "module",
+  "description": "Decide which companies deserve a first message, find the right person, and learn from each round. Offline demo, Dreamstate calls stay quoted.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "check": "node scripts/check.mjs",
+    "test": "node --test",
+    "demo": "node scripts/demo.mjs",
+    "build": "node scripts/build.mjs",
+    "plan-install": "node scripts/plan-install.mjs",
+    "score": "node scripts/score.mjs",
+    "spend-check": "node scripts/spend-check.mjs",
+    "skills": "node scripts/skills.mjs",
+    "skills:link": "node scripts/skills-link.mjs"
+  }
+}

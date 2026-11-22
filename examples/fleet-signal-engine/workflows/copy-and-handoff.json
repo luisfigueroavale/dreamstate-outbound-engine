@@ -1,0 +1,7 @@
+{
+  "kind": "workflow",
+  "status": "disabled",
+  "title": "copy-and-handoff",
+  "fictional": true,
+  "summary": "Disabled graph. Approval node before any enrollment node."
+}

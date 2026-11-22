@@ -1,0 +1,45 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import test from "node:test";
+import { renderReport, runBatch } from "./engine.mjs";
+
+const batch = JSON.parse(readFileSync(new URL("../examples/first-batch/batch.json", import.meta.url), "utf8"));
+
+test("the first batch covers the offline cases and sends nothing", () => {
+  const result = runBatch(batch);
+  assert.equal(result.funnel.records, 16);
+  assert.equal(result.funnel.rejected, 2);
+  assert.equal(result.funnel.accounts, 12);
+  assert.equal(result.rejected.find((row) => row.domain === "acme-split.example").reason, "identity not proven");
+  assert.equal(result.funnel.ready, 0);
+  assert.equal(result.sent, 0);
+  assert.equal(result.credits, 0);
+  const byDomain = Object.fromEntries(result.accounts.map((account) => [account.domain, account]));
+  assert.equal(byDomain["dock-north.example"].signal_count, 2);
+  assert.equal(result.accounts.filter((account) => account.hold === "company fit did not pass").length, 3);
+  assert.equal(byDomain["cold-storage-east.example"].tier, "A");
+  assert.equal(byDomain["cold-storage-east.example"].hold, "company fit did not pass");
+  assert.equal(byDomain["quiet-shed.example"].hold, "suppressed");
+  assert.equal(byDomain["lone-weak.example"].hold, "tier C, no further spend");
+  assert.equal(byDomain["old-posting.example"].tier, "C");
+  assert.ok(byDomain["old-posting.example"].signal_notes.some((note) => note.reason === "past cutoff"));
+  assert.equal(byDomain["champion-return.example"].tier, "A");
+  assert.equal(byDomain["champion-return.example"].selected, true);
+  assert.equal(byDomain["mill-yard.example"].hold, "capacity");
+  assert.equal(result.buyer_holds.find((row) => row.domain === "river-dock.example").hold_detail, "title alone never proves authority");
+  assert.equal(result.buyer_holds.find((row) => row.domain === "north-lane.example").hold_detail, "current employer not confirmed");
+  const messages = Object.fromEntries(result.messages.map((row) => [row.domain, row]));
+  assert.ok(messages["dock-north.example"].holds.includes("catch-all is held"));
+  assert.ok(messages["south-pier.example"].holds.includes("verification is stale"));
+  assert.ok(messages["champion-return.example"].holds.includes("not reviewed"));
+  assert.equal(result.history.comparisons[0].variants[0].verdict, "too little data");
+  const report = renderReport(result);
+  assert.match(report, /Fictional example/);
+  assert.match(report, /Sent \| 0/);
+  const reviewed = runBatch(batch, { reviewed: ["champion-return.example"] });
+  assert.equal(reviewed.funnel.ready, 1);
+  assert.equal(reviewed.sent, 0);
+  const tighter = runBatch(batch, { capacity: 1 });
+  assert.equal(tighter.funnel.selected_accounts, 1);
+  assert.equal(tighter.accounts.find((account) => account.domain === "champion-return.example").hold, "capacity");
+});

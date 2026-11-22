@@ -1,0 +1,5 @@
+{
+  "name": "draft-first-touch",
+  "kind": "ai",
+  "summary": "Use the assigned line once. Return a draft that is not reviewed."
+}

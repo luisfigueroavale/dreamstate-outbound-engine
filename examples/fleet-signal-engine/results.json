@@ -1,0 +1,182 @@
+{
+  "fictional": true,
+  "seller": "Lanternway",
+  "as_of": "2026-11-21",
+  "capacity": 2,
+  "credits": 0,
+  "sent": 0,
+  "funnel": {
+    "records": 4,
+    "rejected": 0,
+    "accounts": 4,
+    "tier_a": 2,
+    "tier_b": 1,
+    "tier_c": 1,
+    "selected_accounts": 2,
+    "buyers": 2,
+    "verified_emails": 2,
+    "ready": 0,
+    "sent": 0,
+    "credits": 0
+  },
+  "rejected": [],
+  "accounts": [
+    {
+      "domain": "lake-route-haul.example",
+      "names": [
+        "Lake Route Haul"
+      ],
+      "source_ids": [
+        "f2"
+      ],
+      "signal_count": 2,
+      "fit_score": 100,
+      "fit_passed": true,
+      "excluded": false,
+      "unknowns": [],
+      "suppression": "clear",
+      "suppressed": false,
+      "tier": "B",
+      "signal_points": 24.2,
+      "signal_families": [
+        "hiring",
+        "route_news"
+      ],
+      "single_family_capped": false,
+      "signal_notes": [],
+      "selected": true,
+      "hold": null,
+      "rank": 2
+    },
+    {
+      "domain": "prairie-broker.example",
+      "names": [
+        "Prairie Broker"
+      ],
+      "source_ids": [
+        "f3"
+      ],
+      "signal_count": 1,
+      "fit_score": 30,
+      "fit_passed": false,
+      "excluded": true,
+      "unknowns": [],
+      "suppression": "clear",
+      "suppressed": false,
+      "tier": "A",
+      "signal_points": 46,
+      "signal_families": [
+        "past_champion"
+      ],
+      "single_family_capped": false,
+      "signal_notes": [],
+      "selected": false,
+      "hold": "company fit did not pass",
+      "rank": null
+    },
+    {
+      "domain": "quiet-depot.example",
+      "names": [
+        "Quiet Depot"
+      ],
+      "source_ids": [
+        "f4"
+      ],
+      "signal_count": 1,
+      "fit_score": 100,
+      "fit_passed": true,
+      "excluded": false,
+      "unknowns": [],
+      "suppression": "clear",
+      "suppressed": false,
+      "tier": "C",
+      "signal_points": 0,
+      "signal_families": [],
+      "single_family_capped": false,
+      "signal_notes": [
+        {
+          "family": "hiring",
+          "reason": "past cutoff",
+          "age_days": 112
+        }
+      ],
+      "selected": false,
+      "hold": "tier C, no further spend",
+      "rank": null
+    },
+    {
+      "domain": "red-cedar-freight.example",
+      "names": [
+        "Red Cedar Freight"
+      ],
+      "source_ids": [
+        "f1"
+      ],
+      "signal_count": 1,
+      "fit_score": 100,
+      "fit_passed": true,
+      "excluded": false,
+      "unknowns": [],
+      "suppression": "clear",
+      "suppressed": false,
+      "tier": "A",
+      "signal_points": 46,
+      "signal_families": [
+        "past_champion"
+      ],
+      "single_family_capped": false,
+      "signal_notes": [],
+      "selected": true,
+      "hold": null,
+      "rank": 1
+    }
+  ],
+  "buyer_holds": [],
+  "messages": [
+    {
+      "domain": "lake-route-haul.example",
+      "person": {
+        "name": "Jules Hart",
+        "title": "Fleet Maintenance Manager",
+        "profile_url": "https://people.example/jules-hart",
+        "role": "fleet maintenance manager",
+        "employer_domain": "lake-route-haul.example"
+      },
+      "email_status": "valid",
+      "email_hold": null,
+      "variant": "The shop board shows the truck before it is due.",
+      "hex8": "fa0fcd28",
+      "body": "Lake Route Haul is hiring a maintenance manager and opening a depot. The shop board shows the truck before it is due. Lanternway is a fictional shop board for regional fleets.",
+      "reviewed": false,
+      "ready": false,
+      "holds": [
+        "not reviewed"
+      ]
+    },
+    {
+      "domain": "red-cedar-freight.example",
+      "person": {
+        "name": "Eden Moss",
+        "title": "VP Operations",
+        "profile_url": "https://people.example/eden-moss",
+        "role": "vp operations",
+        "employer_domain": "red-cedar-freight.example"
+      },
+      "email_status": "valid",
+      "email_hold": null,
+      "variant": "One lane for every service this week.",
+      "hex8": "8317c21f",
+      "body": "A former fleet lead now runs this shop. One lane for every service this week. Lanternway is a fictional shop board for regional fleets.",
+      "reviewed": false,
+      "ready": false,
+      "holds": [
+        "not reviewed"
+      ]
+    }
+  ],
+  "history": {
+    "ok": true,
+    "error": null,
+    "comparisons": []
+  }
+}

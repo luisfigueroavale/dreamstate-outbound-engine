@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "required": ["ceiling", "claims", "spend"],
+  "properties": {
+    "ceiling": { "type": "number", "minimum": 0 },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["capability_id", "credits"],
+        "properties": {
+          "capability_id": { "type": "string" },
+          "credits": { "type": "number", "minimum": 0 },
+          "step": { "type": "string" }
+        }
+      }
+    },
+    "spend": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["capability_id", "credits"],
+        "properties": {
+          "capability_id": { "type": "string" },
+          "credits": { "type": "number", "minimum": 0 },
+          "at": { "type": "string" }
+        }
+      }
+    },
+    "approved_windows": { "type": "array" }
+  }
+}

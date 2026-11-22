@@ -1,0 +1,7 @@
+{
+  "kind": "callable",
+  "status": "disabled",
+  "step": "score-signals",
+  "publish_with": "tables.callables.publish",
+  "local_function": "functions/score-signals.mjs"
+}

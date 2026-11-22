@@ -1,0 +1,8 @@
+{
+  "type": "object",
+  "required": ["kind", "status"],
+  "properties": {
+    "kind": { "type": "string" },
+    "status": { "type": "string", "enum": ["disabled", "blank", "quoted"] }
+  }
+}

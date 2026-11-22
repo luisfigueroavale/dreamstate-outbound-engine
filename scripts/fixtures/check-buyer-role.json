@@ -1,0 +1,4 @@
+{
+  "function": "check-buyer-role",
+  "note": "Offline fixture. The tests call the function directly."
+}

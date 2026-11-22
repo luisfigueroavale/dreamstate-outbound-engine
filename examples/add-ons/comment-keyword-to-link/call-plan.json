@@ -1,0 +1,30 @@
+{
+  "kind": "call-plan",
+  "status": "disabled",
+  "title": "comment-keyword-to-link",
+  "calls": [
+    {
+      "order": 1,
+      "id": "social.outreach.keyword_dm_rules.list",
+      "mode": "live",
+      "needs_yes": false,
+      "params": {
+        "artifact_id": "from the owner"
+      },
+      "note": "Free read. Copy every rule you still want before any replace."
+    },
+    {
+      "order": 2,
+      "id": "social.outreach.keyword_dm_rules.replace",
+      "mode": "dry_run",
+      "needs_yes": true,
+      "params": {
+        "artifact_id": "from the list",
+        "expected_revision": "from the list",
+        "platform": "from the owner",
+        "rules": "the full set, including rules you are not changing"
+      },
+      "note": "Destructive standing action. A live call waits for a yes. v1 does not go live."
+    }
+  ]
+}

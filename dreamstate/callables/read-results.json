@@ -1,0 +1,7 @@
+{
+  "kind": "callable",
+  "status": "disabled",
+  "step": "read-results",
+  "publish_with": "tables.callables.publish",
+  "local_function": "functions/read-results.mjs"
+}

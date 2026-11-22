@@ -1,0 +1,17 @@
+{
+  "kind": "source",
+  "status": "disabled",
+  "add_with": "tables.table_sources.attach",
+  "run_with": "tables.table_sources.run",
+  "step": "find-buyer",
+  "attach_with": "tables.table_sources.attach",
+  "definition_id": "provider.linkedin.people.search",
+  "credits_per_row": 0,
+  "run_cap": "Source rows land through tables.table_sources.run, ceiling 50 credits a call.",
+  "input_bindings": {
+    "account_id": {
+      "kind": "sender",
+      "required": true
+    }
+  }
+}

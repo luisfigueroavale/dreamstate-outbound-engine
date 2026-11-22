@@ -1,0 +1,5 @@
+{
+  "name": "check-buyer-role",
+  "kind": "data",
+  "summary": "Current employer and title must match, or the row is held."
+}

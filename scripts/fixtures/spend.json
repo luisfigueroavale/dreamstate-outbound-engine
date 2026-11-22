@@ -1,0 +1,33 @@
+{
+  "ceiling": 20,
+  "approved_windows": [
+    {
+      "start": "2026-11-18",
+      "end": "2026-11-21"
+    }
+  ],
+  "claims": [
+    {
+      "capability_id": "crm.contact.find_person",
+      "credits": 0.9,
+      "step": "champion"
+    }
+  ],
+  "spend": [
+    {
+      "capability_id": "crm.contact.find_person",
+      "credits": 0.9,
+      "at": "2026-11-20"
+    },
+    {
+      "capability_id": "crm.signals.search_run",
+      "credits": 40,
+      "at": "2026-11-19"
+    },
+    {
+      "capability_id": "tables.columns.run",
+      "credits": 12,
+      "at": "2026-11-01"
+    }
+  ]
+}

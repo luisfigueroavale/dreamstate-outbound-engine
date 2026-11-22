@@ -1,0 +1,17 @@
+{
+  "kind": "column",
+  "status": "disabled",
+  "add_with": "tables.columns.add",
+  "run_with": "tables.columns.run",
+  "step": "draft-first-touch",
+  "column_kind": "ai prompt",
+  "credits_per_row": 1,
+  "run_cap": "An AI prompt column. Quote tables.columns.run before any live row.",
+  "input_bindings": {
+    "prompt": {
+      "kind": "template",
+      "from": "prompts/draft-first-touch.md"
+    }
+  },
+  "prompt_required": true
+}
