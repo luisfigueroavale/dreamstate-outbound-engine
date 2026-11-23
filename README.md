@@ -39,7 +39,7 @@ Each morning the spend watch reads free credit rows and flags anything no step c
 | [skills/](skills/set-up-engine/SKILL.md) | 15 skills | Free reads, paid steps quoted | See the table below |
 | [examples/first-batch/](examples/first-batch/report.md) | Offline demo | 0 credits | Anyone learning the engine |
 | [examples/fleet-signal-engine/](examples/fleet-signal-engine/plan.md) | Fictional worked example | Quoted, not measured | Outbound Lead |
-| [examples/add-ons/](examples/add-ons/README.md) | Three disabled add-ons | A yes before any live call | Lead Sourcer |
+| [examples/add-ons/](examples/add-ons/README.md) | Now in the playbook | Free to read | Lead Sourcer |
 | [docs/tool-map.md](docs/tool-map.md) | Capability, cost, consent, CLI form | Free to read | Every seat |
 
 Skill count: 15
@@ -128,6 +128,7 @@ The Outbound Lead owns this repo. No new seat. The seats and the rollup live nex
 | Repo | What it is |
 | --- | --- |
 | [dreamstate-gtm-team](https://github.com/luisfigueroavale/dreamstate-gtm-team) | Seats, rules, and the 08:00 rollup |
+| [dreamstate-outbound-playbook](https://github.com/luisfigueroavale/dreamstate-outbound-playbook) | Quickstart, three automations, the stack grader, cards, costs, and the demo |
 | [dreamstate-linkedin-funnel](https://github.com/luisfigueroavale/dreamstate-linkedin-funnel) | Content desk |
 | [dreamstate-geo](https://github.com/luisfigueroavale/dreamstate-geo) | Search desk |
 | [dreamstate-design](https://github.com/luisfigueroavale/dreamstate-design) | Graphics |

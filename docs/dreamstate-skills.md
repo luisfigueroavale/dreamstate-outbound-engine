@@ -5,7 +5,7 @@ This repo does not copy the Dreamstate skills. They already live in the workspac
 | Job | Dreamstate skill | This repo |
 | --- | --- | --- |
 | Build the list | `list-building` | `build-account-list` decides caps and order |
-| Warm people from posts | `linkedin-warm-signals` | The add-on note only |
+| Warm people from posts | `linkedin-warm-signals` | Moved to the [playbook](https://github.com/luisfigueroavale/dreamstate-outbound-playbook) |
 | Signals | `dreamstate-signals` | `score-account-signals` sets points and tiers |
 | Fill a missing field | `enrichment` | `find-verified-email` holds catch-all |
 | Sequences | `outreach` | `hand-off-to-sequence` stops before enroll |
